@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QQQ MDD Tracker</title>
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:40px;">
+  <h1>QQQ MDD Tracker</h1>
+
+  <p>직전 최고가</p>
+  <input id="peak" type="number" value="540" style="padding:10px; width:200px;">
+
+  <p>현재가</p>
+  <input id="current" type="number" value="432" style="padding:10px; width:200px;">
+
+  <h2 id="result">MDD: -20.00%</h2>
+
+  <button onclick="calc()" style="padding:12px 20px; font-size:16px;">계산</button>
+
+  <script>
+    function calc() {
+      const peak = parseFloat(document.getElementById('peak').value);
+      const current = parseFloat(document.getElementById('current').value);
+
+      if (!peak || !current) {
+        document.getElementById('result').innerText = "숫자를 입력하세요";
+        return;
+      }
+
+      const mdd = ((current - peak) / peak * 100).toFixed(2);
+      document.getElementById('result').innerText = "MDD: " + mdd + "%";
+    }
+  </script>
+</body>
+</html>
