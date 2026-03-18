@@ -1,367 +1,716 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { CalendarDays, BellRing, TrendingDown, Wallet, CheckCircle2, Trash2, RefreshCw, Target, BarChart3, AlertTriangle } from 'lucide-react';
-
-
-const fmt = (n: number) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
-const pct = (n: number) => ${n.toFixed(1)}%;
-
-
-function getBuyAmountKRW(mdd: number, baseBuy: number) {
-if (mdd <= -40) return Math.round(baseBuy * 2);
-if (mdd <= -30) return Math.round(baseBuy * 1.5);
-if (mdd <= -20) return Math.round(baseBuy * 1.25);
-return baseBuy;
-}
-
-
-function getStage(mdd: number) {
-if (mdd <= -40) return { label: '-40% 핵심 구간', variant: 'destructive' as const, note: '강하게 추가매수 고려', tone: 'bg-red-50 text-red-700 border-red-200' };
-if (mdd <= -30) return { label: '-30% 본격 구간', variant: 'secondary' as const, note: '추가매수 확대 구간', tone: 'bg-amber-50 text-amber-700 border-amber-200' };
-if (mdd <= -20) return { label: '-20% 진입 구간', variant: 'outline' as const, note: '가볍게 추가매수', tone: 'bg-blue-50 text-blue-700 border-blue-200' };
-return { label: '평시 구간', variant: 'default' as const, note: '기본 자동매수 유지', tone: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
-}
-
-
-function getAlertLevel(mdd: number) {
-if (mdd <= -40) return '지금 강한 추가매수 검토';
-if (mdd <= -30) return '이벤트 추가매수 실행 구간';
-if (mdd <= -20) return '가벼운 추가매수 가능 구간';
-return '자동매수만 유지';
-}
-
-
-export default function TqqqMddTrackerApp() {
-const [manualPeakPrice, setManualPeakPrice] = useState(540);
-const [currentPrice, setCurrentPrice] = useState(432);
-const [weeklyAutoBuy, setWeeklyAutoBuy] = useState(200000);
-const [cashReserve, setCashReserve] = useState(3000000);
-const [useAutoPrice, setUseAutoPrice] = useState(true);
-const [isLoading, setIsLoading] = useState(false);
-const [priceSource, setPriceSource] = useState('수동 입력');
-const [lastUpdated, setLastUpdated] = useState('');
-
-
-const [log, setLog] = useState([
-{ date: '2026-03-17', type: '기본 자동매수', amount: 200000, memo: '주간 자동이체' },
-{ date: '2026-03-18', type: '이벤트 추가매수', amount: 250000, memo: 'QQQ -20% 알림 대응' },
-{ date: '2026-03-25', type: '기본 자동매수', amount: 200000, memo: '주간 자동이체' },
-]);
-
-
-const [newDate, setNewDate] = useState('2026-03-30');
-const [newType, setNewType] = useState('기본 자동매수');
-const [newAmount, setNewAmount] = useState(200000);
-const [newMemo, setNewMemo] = useState('');
-
-
-const effectivePeak = useMemo(() => manualPeakPrice, [manualPeakPrice]);
-
-
-const mdd = useMemo(() => {
-if (!effectivePeak || !currentPrice) return 0;
-return ((currentPrice - effectivePeak) / effectivePeak) * 100;
-}, [effectivePeak, currentPrice]);
-
-
-const stage = getStage(mdd);
-const suggestedBuy = getBuyAmountKRW(mdd, weeklyAutoBuy);
-const mddProgress = Math.min(100, Math.abs(mdd) / 40 * 100);
-
-
-const totalLogged = useMemo(() => log.reduce((sum, item) => sum + item.amount, 0), [log]);
-const autoLogged = useMemo(() => log.filter(x => x.type === '기본 자동매수').reduce((sum, item) => sum + item.amount, 0), [log]);
-const eventLogged = useMemo(() => log.filter(x => x.type !== '기본 자동매수').reduce((sum, item) => sum + item.amount, 0), [log]);
-
-
-const monthlyApprox = useMemo(() => Math.round((weeklyAutoBuy * 52) / 12), [weeklyAutoBuy]);
-
-
-const addLog = () => {
-if (!newDate || !newAmount) return;
-setLog(prev => [
-{ date: newDate, type: newType, amount: newAmount, memo: newMemo || '-' },
-...prev,
-]);
-setNewMemo('');
-};
-
-
-const addSuggestedBuyLog = () => {
-const today = new Date().toISOString().slice(0, 10);
-setLog(prev => [
-{
-date: today,
-type: mdd <= -20 ? '이벤트 추가매수' : '기본 자동매수',
-amount: suggestedBuy,
-memo: ${stage.label} / 권장매수 반영,
-},
-...prev,
-]);
-};
-
-
-const removeLog = (idx: number) => {
-setLog(prev => prev.filter((_, i) => i !== idx));
-};
-
-
-const fetchQqqPrice = async () => {
-setIsLoading(true);
-try {
-const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/QQQ');
-const data = await res.json();
-const meta = data?.chart?.result?.[0]?.meta;
-const price = meta?.regularMarketPrice;
-const previousClose = meta?.previousClose;
-const fiftyTwoWeekHigh = meta?.fiftyTwoWeekHigh;
-
-
-  if (price) setCurrentPrice(Number(price));
-  if (fiftyTwoWeekHigh) setManualPeakPrice(Number(fiftyTwoWeekHigh));
-  setPriceSource(previousClose ? 'Yahoo Finance 자동 반영' : '자동 반영');
-  setLastUpdated(new Date().toLocaleString('ko-KR'));
-} catch (e) {
-  setPriceSource('자동 반영 실패 · 수동 입력 사용');
-} finally {
-  setIsLoading(false);
-}
-
-
-
-};
-
-
-useEffect(() => {
-if (useAutoPrice) fetchQqqPrice();
-}, [useAutoPrice]);
-
-
-return (
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-원일 전용
-QQQ MDD 기준
-
-
-
-자동매수 + MDD 투자 대시보드
-
-
-평소엔 자동매수만 유지하고, QQQ가 크게 빠질 때만 이벤트 추가매수 결정을 빠르게 내리는 초단순 UI
-
-
-
-
-
-<Button variant={useAutoPrice ? 'default' : 'outline'} className="rounded-2xl" onClick={() => setUseAutoPrice(true)}>
-자동 가격
-
-<Button variant={!useAutoPrice ? 'default' : 'outline'} className="rounded-2xl" onClick={() => setUseAutoPrice(false)}>
-수동 입력
-
-
-<RefreshCw className={mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}} />
-새로고침
-
-
-
-
-
-
-
-
-
-      <div className={`rounded-3xl border p-6 shadow-sm ${stage.tone}`}>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="text-sm font-semibold">지금 해야 할 행동</div>
-            <div className="mt-2 text-2xl font-bold">{getAlertLevel(mdd)}</div>
-            <p className="mt-2 text-sm opacity-90">{stage.note}</p>
-          </div>
-          <AlertTriangle className="h-8 w-8" />
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QQQ MDD Tracker</title>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --card:#ffffff;
+      --text:#111827;
+      --sub:#6b7280;
+      --line:#e5e7eb;
+      --blue:#2563eb;
+      --blue-bg:#eff6ff;
+      --green:#059669;
+      --green-bg:#ecfdf5;
+      --amber:#b45309;
+      --amber-bg:#fffbeb;
+      --red:#dc2626;
+      --red-bg:#fef2f2;
+      --shadow:0 8px 24px rgba(15,23,42,0.08);
+      --radius:20px;
+    }
+
+    * { box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#ffffff 0%, #eef4ff 100%);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .hero h1{
+      margin:0 0 8px 0;
+      font-size:28px;
+    }
+
+    .hero p{
+      margin:0;
+      color:var(--sub);
+      line-height:1.5;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .grid-4{
+      grid-template-columns:repeat(4,1fr);
+    }
+
+    .grid-main{
+      grid-template-columns: 1.05fr 1.4fr;
+      margin-top:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin:0 0 14px 0;
+      font-size:16px;
+    }
+
+    .label{
+      font-size:12px;
+      color:var(--sub);
+      margin-bottom:6px;
+    }
+
+    .value-xl{
+      font-size:30px;
+      font-weight:800;
+      line-height:1.15;
+    }
+
+    .value-lg{
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .muted{
+      color:var(--sub);
+      font-size:13px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid transparent;
+    }
+
+    .badge-green{ background:var(--green-bg); color:var(--green); }
+    .badge-blue{ background:var(--blue-bg); color:var(--blue); }
+    .badge-amber{ background:var(--amber-bg); color:var(--amber); }
+    .badge-red{ background:var(--red-bg); color:var(--red); }
+
+    .action-box{
+      border-radius:24px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      background:#fff;
+      margin-top:16px;
+    }
+
+    .action-title{
+      font-size:13px;
+      font-weight:700;
+      color:var(--sub);
+    }
+
+    .action-main{
+      margin-top:8px;
+      font-size:26px;
+      font-weight:800;
+      line-height:1.3;
+    }
+
+    .action-note{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--sub);
+    }
+
+    .pill-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .field{
+      margin-bottom:14px;
+    }
+
+    input, select, button, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:14px;
+      background:#fff;
+    }
+
+    button{
+      cursor:pointer;
+      font-weight:700;
+      border:none;
+      background:var(--text);
+      color:#fff;
+    }
+
+    button.secondary{
+      background:#eef2ff;
+      color:#1e3a8a;
+      border:1px solid #c7d2fe;
+    }
+
+    button.ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .two{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .three{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+    }
+
+    .log-table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:18px;
+    }
+
+    .log-table th,
+    .log-table td{
+      padding:12px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size:14px;
+      vertical-align:middle;
+    }
+
+    .log-table th{
+      color:var(--sub);
+      background:#f8fafc;
+      font-size:12px;
+      letter-spacing:0.2px;
+    }
+
+    .mini{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .mini-card{
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    .mini-card .k{
+      font-size:12px;
+      color:var(--sub);
+    }
+
+    .mini-card .v{
+      margin-top:4px;
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .progress-wrap{
+      margin-top:14px;
+    }
+
+    .progress{
+      height:10px;
+      width:100%;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#60a5fa 0%, #f59e0b 55%, #ef4444 100%);
+      transition:width .25s ease;
+    }
+
+    .small-list{
+      margin:0;
+      padding-left:18px;
+      color:var(--sub);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .right{
+      text-align:right;
+    }
+
+    .danger-btn{
+      background:#fff;
+      color:var(--red);
+      border:1px solid #fecaca;
+      padding:8px 10px;
+      border-radius:12px;
+    }
+
+    @media (max-width: 900px){
+      .grid-4,
+      .grid-main,
+      .two,
+      .three{
+        grid-template-columns:1fr;
+      }
+
+      .value-xl{
+        font-size:26px;
+      }
+
+      .action-main{
+        font-size:22px;
+      }
+
+      .hero h1{
+        font-size:24px;
+      }
+
+      .log-table th:nth-child(4),
+      .log-table td:nth-child(4){
+        display:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>QQQ MDD + 자동매수 대시보드</h1>
+      <p>
+        QQQ 가격 자동반영, 직전 최고가 자동반영, MDD 자동계산, 권장 매수금액 계산,
+        매수일지 저장까지 한 화면에서 보는 개인용 투자 앱.
+      </p>
+    </div>
+
+    <div id="actionBox" class="action-box">
+      <div class="action-title">지금 해야 할 행동</div>
+      <div id="actionMain" class="action-main">자동매수만 유지</div>
+      <div id="actionNote" class="action-note">평시 구간</div>
+      <div class="mini">
+        <div class="mini-card">
+          <div class="k">현재 MDD</div>
+          <div class="v" id="mddBig">0.0%</div>
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-2xl bg-white/70 p-4">
-            <div className="text-xs text-slate-500">권장 매수</div>
-            <div className="mt-1 text-xl font-bold">{fmt(suggestedBuy)}원</div>
-          </div>
-          <div className="rounded-2xl bg-white/70 p-4">
-            <div className="text-xs text-slate-500">현재 MDD</div>
-            <div className="mt-1 text-xl font-bold">{pct(mdd)}</div>
-          </div>
+        <div class="mini-card">
+          <div class="k">이번 주 권장 매수</div>
+          <div class="v" id="suggestedBuyBig">200,000원</div>
         </div>
       </div>
     </div>
 
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      <Card className="rounded-3xl shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><TrendingDown className="h-4 w-4" />QQQ MDD</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">{pct(mdd)}</div>
-          <div className="mt-2 flex items-center gap-2">
-            <Badge variant={stage.variant}>{stage.label}</Badge>
-          </div>
-          <div className="mt-4 space-y-2">
-            <Progress value={mddProgress} />
-            <div className="flex justify-between text-xs text-slate-500">
-              <span>0%</span>
-              <span>-20%</span>
-              <span>-30%</span>
-              <span>-40%</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+    <div class="grid grid-4" style="margin-top:16px;">
+      <div class="card">
+        <h3>QQQ MDD</h3>
+        <div id="mddText" class="value-xl">0.0%</div>
+        <div class="pill-row">
+          <span id="stageBadge" class="badge badge-green">평시 구간</span>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress"><div id="mddBar" class="bar"></div></div>
+          <div class="muted" style="margin-top:8px;">0% / -20% / -30% / -40%</div>
+        </div>
+      </div>
 
-      <Card className="rounded-3xl shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><Target className="h-4 w-4" />가격 상태</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div>
-            <div className="text-xs text-slate-500">QQQ 현재가</div>
-            <div className="text-2xl font-bold">${currentPrice.toFixed(2)}</div>
-          </div>
-          <div>
-            <div className="text-xs text-slate-500">직전 최고가</div>
-            <div className="text-xl font-semibold">${effectivePeak.toFixed(2)}</div>
-          </div>
-          <div className="text-xs text-slate-500">{priceSource}{lastUpdated ? ` · ${lastUpdated}` : ''}</div>
-        </CardContent>
-      </Card>
+      <div class="card">
+        <h3>가격 상태</h3>
+        <div class="label">QQQ 현재가</div>
+        <div id="currentPriceText" class="value-lg">$0.00</div>
+        <div class="label" style="margin-top:14px;">직전 최고가(52주 고점)</div>
+        <div id="peakPriceText" class="value-lg">$0.00</div>
+        <div id="updatedAtText" class="muted" style="margin-top:14px;">자동 반영 대기중</div>
+      </div>
 
-      <Card className="rounded-3xl shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><Wallet className="h-4 w-4" />자동매수 기준</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">{fmt(weeklyAutoBuy)}원</div>
-          <p className="mt-2 text-sm text-slate-500">주간 자동매수 / 월 환산 약 {fmt(monthlyApprox)}원</p>
-          <div className="mt-4 rounded-2xl bg-slate-100 p-3 text-sm text-slate-700">
-            평시 {fmt(weeklyAutoBuy)}원<br />
-            -20% {fmt(Math.round(weeklyAutoBuy * 1.25))}원<br />
-            -30% {fmt(Math.round(weeklyAutoBuy * 1.5))}원<br />
-            -40% {fmt(weeklyAutoBuy * 2)}원
-          </div>
-        </CardContent>
-      </Card>
+      <div class="card">
+        <h3>자동매수 기준</h3>
+        <div id="weeklyAutoBuyText" class="value-xl">200,000원</div>
+        <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 866,667원</div>
+        <div class="muted" style="margin-top:14px; line-height:1.7;">
+          평시 100%<br>
+          -20% 125%<br>
+          -30% 150%<br>
+          -40% 200%
+        </div>
+      </div>
 
-      <Card className="rounded-3xl shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><BarChart3 className="h-4 w-4" />누적 매수</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">{fmt(totalLogged)}원</div>
-          <div className="mt-4 space-y-2 text-sm text-slate-600">
-            <div className="flex justify-between"><span>기본 자동매수</span><span>{fmt(autoLogged)}원</span></div>
-            <div className="flex justify-between"><span>이벤트 추가매수</span><span>{fmt(eventLogged)}원</span></div>
-            <div className="flex justify-between"><span>대기 현금</span><span>{fmt(cashReserve)}원</span></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div class="card">
+        <h3>누적 매수</h3>
+        <div id="totalLoggedText" class="value-xl">0원</div>
+        <div class="muted" style="margin-top:14px; line-height:1.8;">
+          기본 자동매수: <span id="autoLoggedText">0원</span><br>
+          이벤트 추가매수: <span id="eventLoggedText">0원</span><br>
+          대기 현금: <span id="cashReserveText">0원</span>
+        </div>
+      </div>
     </div>
 
-    <div className="grid gap-6 xl:grid-cols-5">
-      <Card className="rounded-3xl shadow-sm xl:col-span-2">
-        <CardHeader>
-          <CardTitle>입력 / 설정</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">직전 최고가 (달러)</label>
-            <Input type="number" value={manualPeakPrice} onChange={(e) => setManualPeakPrice(Number(e.target.value))} disabled={useAutoPrice} />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">QQQ 현재가 / 전일 종가 (달러)</label>
-            <Input type="number" value={currentPrice} onChange={(e) => setCurrentPrice(Number(e.target.value))} disabled={useAutoPrice} />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">주간 자동매수 금액 (원)</label>
-            <Input type="number" value={weeklyAutoBuy} onChange={(e) => setWeeklyAutoBuy(Number(e.target.value))} />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">대기 현금 (원)</label>
-            <Input type="number" value={cashReserve} onChange={(e) => setCashReserve(Number(e.target.value))} />
-          </div>
-          <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-            <div className="font-semibold">최종 룰</div>
-            <ul className="mt-2 list-disc space-y-1 pl-5">
-              <li>기본은 주 20만원 자동매수</li>
-              <li>QQQ MDD -20 / -30 / -40 알림 대응</li>
-              <li>평소에는 앱 안 보고 자동매수만 유지</li>
-              <li>목돈 생기고 크게 빠졌을 때만 추가매수</li>
-            </ul>
-          </div>
-          <Button className="w-full rounded-2xl" onClick={addSuggestedBuyLog}>지금 권장매수 일지에 추가</Button>
-        </CardContent>
-      </Card>
+    <div class="grid grid-main">
+      <div class="card">
+        <h3>입력 / 설정</h3>
 
-      <Card className="rounded-3xl shadow-sm xl:col-span-3">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2"><CalendarDays className="h-5 w-5" />매수 일지</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-3 md:grid-cols-4">
-            <Input type="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} />
-            <Input value={newType} onChange={(e) => setNewType(e.target.value)} placeholder="기본 자동매수 / 이벤트 추가매수" />
-            <Input type="number" value={newAmount} onChange={(e) => setNewAmount(Number(e.target.value))} placeholder="금액" />
-            <Input value={newMemo} onChange={(e) => setNewMemo(e.target.value)} placeholder="메모" />
-          </div>
-          <Button className="rounded-2xl" onClick={addLog}>기록 추가</Button>
+        <div class="field">
+          <div class="label">주간 자동매수 금액 (원)</div>
+          <input id="weeklyAutoBuy" type="number" step="1000" />
+        </div>
 
-          <div className="overflow-hidden rounded-3xl border bg-white">
-            <div className="grid grid-cols-12 border-b bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-600">
-              <div className="col-span-2">날짜</div>
-              <div className="col-span-3">구분</div>
-              <div className="col-span-2">금액</div>
-              <div className="col-span-4">메모</div>
-              <div className="col-span-1 text-right">삭제</div>
-            </div>
-            <div className="max-h-[420px] overflow-auto">
-              {log.map((item, idx) => (
-                <div key={`${item.date}-${idx}`} className="grid grid-cols-12 items-center border-b px-4 py-3 text-sm">
-                  <div className="col-span-2">{item.date}</div>
-                  <div className="col-span-3">
-                    <Badge variant={item.type === '기본 자동매수' ? 'secondary' : 'outline'}>{item.type}</Badge>
-                  </div>
-                  <div className="col-span-2 font-semibold">{fmt(item.amount)}원</div>
-                  <div className="col-span-4 text-slate-600">{item.memo}</div>
-                  <div className="col-span-1 flex justify-end">
-                    <Button variant="ghost" size="icon" onClick={() => removeLog(idx)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div class="field">
+          <div class="label">대기 현금 (원)</div>
+          <input id="cashReserve" type="number" step="1000" />
+        </div>
+
+        <div class="two">
+          <button id="refreshPriceBtn" class="secondary">가격 새로고침</button>
+          <button id="saveSettingsBtn">설정 저장</button>
+        </div>
+
+        <div style="height:12px;"></div>
+
+        <button id="addSuggestedBtn" class="secondary">지금 권장매수 일지 추가</button>
+
+        <div class="card" style="margin-top:16px; padding:14px; box-shadow:none;">
+          <h3 style="margin-bottom:10px;">최종 룰</h3>
+          <ul class="small-list">
+            <li>기본은 주 20만원 자동매수</li>
+            <li>QQQ MDD -20 / -30 / -40 구간만 체크</li>
+            <li>평소에는 앱 안 보고 자동매수만 유지</li>
+            <li>목돈 생기고 크게 빠졌을 때만 이벤트 추가매수</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>매수 일지</h3>
+
+        <div class="three">
+          <div class="field">
+            <div class="label">날짜</div>
+            <input id="logDate" type="date" />
           </div>
-        </CardContent>
-      </Card>
+          <div class="field">
+            <div class="label">구분</div>
+            <select id="logType">
+              <option>기본 자동매수</option>
+              <option>이벤트 추가매수</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="label">금액</div>
+            <input id="logAmount" type="number" step="1000" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">메모</div>
+          <textarea id="logMemo" rows="3" placeholder="메모 입력"></textarea>
+        </div>
+
+        <div class="row">
+          <button id="addLogBtn" style="max-width:180px;">기록 추가</button>
+          <button id="clearLogBtn" class="ghost" style="max-width:180px;">전체 기록 삭제</button>
+        </div>
+
+        <div style="margin-top:18px; overflow:auto;">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>날짜</th>
+                <th>구분</th>
+                <th>금액</th>
+                <th>메모</th>
+                <th class="right">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
+  <script>
+    const $ = (id) => document.getElementById(id);
 
+    const defaults = {
+      weeklyAutoBuy: 200000,
+      cashReserve: 3000000,
+      peakPrice: 0,
+      currentPrice: 0,
+      updatedAt: "",
+      logs: [
+        { date: "2026-03-17", type: "기본 자동매수", amount: 200000, memo: "주간 자동이체" },
+        { date: "2026-03-18", type: "이벤트 추가매수", amount: 250000, memo: "QQQ -20% 알림 대응" }
+      ]
+    };
 
-);
-}
+    function fmt(n){
+      return new Intl.NumberFormat("ko-KR").format(Math.round(Number(n) || 0));
+    }
 
+    function getSettings(){
+      const saved = localStorage.getItem("mddTrackerSettings");
+      return saved ? JSON.parse(saved) : defaults;
+    }
+
+    function saveSettings(data){
+      localStorage.setItem("mddTrackerSettings", JSON.stringify(data));
+    }
+
+    function getStage(mdd){
+      if (mdd <= -40) return {
+        badge:"-40% 핵심 구간",
+        badgeClass:"badge-red",
+        action:"지금 강한 추가매수 검토",
+        note:"핵심 이벤트 구간. 강하게 대응할지 검토"
+      };
+      if (mdd <= -30) return {
+        badge:"-30% 본격 구간",
+        badgeClass:"badge-amber",
+        action:"이벤트 추가매수 실행 구간",
+        note:"본격 추가매수 구간"
+      };
+      if (mdd <= -20) return {
+        badge:"-20% 진입 구간",
+        badgeClass:"badge-blue",
+        action:"가벼운 추가매수 가능 구간",
+        note:"소액 이벤트 매수 검토"
+      };
+      return {
+        badge:"평시 구간",
+        badgeClass:"badge-green",
+        action:"자동매수만 유지",
+        note:"평소처럼 자동매수만 유지"
+      };
+    }
+
+    function getSuggestedBuy(mdd, weeklyAutoBuy){
+      if (mdd <= -40) return Math.round(weeklyAutoBuy * 2);
+      if (mdd <= -30) return Math.round(weeklyAutoBuy * 1.5);
+      if (mdd <= -20) return Math.round(weeklyAutoBuy * 1.25);
+      return weeklyAutoBuy;
+    }
+
+    async function fetchQqqPrice(){
+      try {
+        $("updatedAtText").textContent = "가격 불러오는 중...";
+        const res = await fetch("/api/qqq");
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          throw new Error(data.error || "가격 조회 실패");
+        }
+
+        const settings = getSettings();
+        settings.currentPrice = Number(data.currentPrice || 0);
+        settings.peakPrice = Number(data.peakPrice || 0);
+        settings.updatedAt = data.updatedAt || new Date().toISOString();
+        saveSettings(settings);
+
+        render();
+      } catch (e) {
+        $("updatedAtText").textContent = "가격 자동반영 실패";
+        console.error(e);
+      }
+    }
+
+    function render(){
+      const settings = getSettings();
+
+      const peakPrice = Number(settings.peakPrice) || 0;
+      const currentPrice = Number(settings.currentPrice) || 0;
+      const weeklyAutoBuy = Number(settings.weeklyAutoBuy) || 0;
+      const cashReserve = Number(settings.cashReserve) || 0;
+      const logs = settings.logs || [];
+      const updatedAt = settings.updatedAt || "";
+
+      const mdd = peakPrice ? ((currentPrice - peakPrice) / peakPrice) * 100 : 0;
+      const stage = getStage(mdd);
+      const suggestedBuy = getSuggestedBuy(mdd, weeklyAutoBuy);
+      const monthlyApprox = Math.round((weeklyAutoBuy * 52) / 12);
+      const totalLogged = logs.reduce((a,b)=>a + Number(b.amount || 0), 0);
+      const autoLogged = logs.filter(x => x.type === "기본 자동매수").reduce((a,b)=>a + Number(b.amount || 0), 0);
+      const eventLogged = logs.filter(x => x.type !== "기본 자동매수").reduce((a,b)=>a + Number(b.amount || 0), 0);
+
+      $("weeklyAutoBuy").value = weeklyAutoBuy;
+      $("cashReserve").value = cashReserve;
+
+      $("mddText").textContent = mdd.toFixed(1) + "%";
+      $("mddBig").textContent = mdd.toFixed(1) + "%";
+      $("currentPriceText").textContent = currentPrice ? "$" + currentPrice.toFixed(2) : "-";
+      $("peakPriceText").textContent = peakPrice ? "$" + peakPrice.toFixed(2) : "-";
+      $("weeklyAutoBuyText").textContent = fmt(weeklyAutoBuy) + "원";
+      $("monthlyApproxText").textContent = "월 환산 약 " + fmt(monthlyApprox) + "원";
+      $("suggestedBuyBig").textContent = fmt(suggestedBuy) + "원";
+      $("totalLoggedText").textContent = fmt(totalLogged) + "원";
+      $("autoLoggedText").textContent = fmt(autoLogged) + "원";
+      $("eventLoggedText").textContent = fmt(eventLogged) + "원";
+      $("cashReserveText").textContent = fmt(cashReserve) + "원";
+      $("updatedAtText").textContent = updatedAt
+        ? "자동 반영: " + new Date(updatedAt).toLocaleString("ko-KR")
+        : "자동 반영 대기중";
+
+      $("actionMain").textContent = stage.action;
+      $("actionNote").textContent = stage.note;
+
+      const badge = $("stageBadge");
+      badge.textContent = stage.badge;
+      badge.className = "badge " + stage.badgeClass;
+
+      const progress = Math.min(100, Math.abs(mdd) / 40 * 100);
+      $("mddBar").style.width = progress + "%";
+
+      renderLogs(logs);
+    }
+
+    function renderLogs(logs){
+      const tbody = $("logTableBody");
+      tbody.innerHTML = "";
+
+      if (!logs.length){
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="muted" style="padding:20px;">기록이 아직 없습니다.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      logs.forEach((log, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${log.date || "-"}</td>
+          <td>${log.type || "-"}</td>
+          <td>${fmt(log.amount)}원</td>
+          <td>${log.memo || "-"}</td>
+          <td class="right"><button class="danger-btn" onclick="deleteLog(${idx})">삭제</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function saveFormSettings(){
+      const settings = getSettings();
+      settings.weeklyAutoBuy = Number($("weeklyAutoBuy").value || 0);
+      settings.cashReserve = Number($("cashReserve").value || 0);
+      saveSettings(settings);
+      render();
+      alert("설정 저장 완료");
+    }
+
+    function addLog(typeOverride = null, amountOverride = null, memoOverride = null){
+      const settings = getSettings();
+
+      const date = $("logDate").value || new Date().toISOString().slice(0,10);
+      const type = typeOverride || $("logType").value;
+      const amount = Number(amountOverride || $("logAmount").value || 0);
+      const memo = memoOverride || $("logMemo").value || "-";
+
+      if (!amount){
+        alert("금액을 입력해줘");
+        return;
+      }
+
+      settings.logs.unshift({ date, type, amount, memo });
+      saveSettings(settings);
+
+      $("logAmount").value = "";
+      $("logMemo").value = "";
+      render();
+    }
+
+    function addSuggestedLog(){
+      const settings = getSettings();
+      const peakPrice = Number(settings.peakPrice) || 0;
+      const currentPrice = Number(settings.currentPrice) || 0;
+      const weeklyAutoBuy = Number(settings.weeklyAutoBuy) || 0;
+      const mdd = peakPrice ? ((currentPrice - peakPrice) / peakPrice) * 100 : 0;
+      const suggestedBuy = getSuggestedBuy(mdd, weeklyAutoBuy);
+      const stage = getStage(mdd);
+
+      addLog(
+        mdd <= -20 ? "이벤트 추가매수" : "기본 자동매수",
+        suggestedBuy,
+        stage.badge + " / 권장매수 반영"
+      );
+    }
+
+    function clearLogs(){
+      if (!confirm("전체 매수일지를 삭제할까?")) return;
+      const settings = getSettings();
+      settings.logs = [];
+      saveSettings(settings);
+      render();
+    }
+
+    function deleteLog(index){
+      const settings = getSettings();
+      settings.logs.splice(index, 1);
+      saveSettings(settings);
+      render();
+    }
+
+    window.deleteLog = deleteLog;
+
+    $("saveSettingsBtn").addEventListener("click", saveFormSettings);
+    $("addLogBtn").addEventListener("click", () => addLog());
+    $("addSuggestedBtn").addEventListener("click", addSuggestedLog);
+    $("clearLogBtn").addEventListener("click", clearLogs);
+    $("refreshPriceBtn").addEventListener("click", fetchQqqPrice);
+
+    (function init(){
+      if (!localStorage.getItem("mddTrackerSettings")){
+        saveSettings(defaults);
+      }
+      $("logDate").value = new Date().toISOString().slice(0,10);
+      render();
+      fetchQqqPrice();
+    })();
+  </script>
+</body>
+</html>
