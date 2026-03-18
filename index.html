@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { CalendarDays, BellRing, TrendingDown, Wallet, CheckCircle2, Trash2 } from 'lucide-react';
+import { CalendarDays, BellRing, TrendingDown, Wallet, CheckCircle2, Trash2, RefreshCw, Target, BarChart3, AlertTriangle } from 'lucide-react';
 
 
 const fmt = (n: number) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
@@ -12,7 +12,7 @@ const pct = (n: number) => ${n.toFixed(1)}%;
 
 
 function getBuyAmountKRW(mdd: number, baseBuy: number) {
-if (mdd <= -40) return baseBuy * 2;
+if (mdd <= -40) return Math.round(baseBuy * 2);
 if (mdd <= -30) return Math.round(baseBuy * 1.5);
 if (mdd <= -20) return Math.round(baseBuy * 1.25);
 return baseBuy;
@@ -20,18 +20,30 @@ return baseBuy;
 
 
 function getStage(mdd: number) {
-if (mdd <= -40) return { label: '-40% 핵심 구간', color: 'destructive' as const, note: '강하게 추가매수 고려' };
-if (mdd <= -30) return { label: '-30% 본격 구간', color: 'secondary' as const, note: '추가매수 확대 구간' };
-if (mdd <= -20) return { label: '-20% 진입 구간', color: 'outline' as const, note: '가볍게 추가매수' };
-return { label: '평시 구간', color: 'default' as const, note: '기본 자동매수 유지' };
+if (mdd <= -40) return { label: '-40% 핵심 구간', variant: 'destructive' as const, note: '강하게 추가매수 고려', tone: 'bg-red-50 text-red-700 border-red-200' };
+if (mdd <= -30) return { label: '-30% 본격 구간', variant: 'secondary' as const, note: '추가매수 확대 구간', tone: 'bg-amber-50 text-amber-700 border-amber-200' };
+if (mdd <= -20) return { label: '-20% 진입 구간', variant: 'outline' as const, note: '가볍게 추가매수', tone: 'bg-blue-50 text-blue-700 border-blue-200' };
+return { label: '평시 구간', variant: 'default' as const, note: '기본 자동매수 유지', tone: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+}
+
+
+function getAlertLevel(mdd: number) {
+if (mdd <= -40) return '지금 강한 추가매수 검토';
+if (mdd <= -30) return '이벤트 추가매수 실행 구간';
+if (mdd <= -20) return '가벼운 추가매수 가능 구간';
+return '자동매수만 유지';
 }
 
 
 export default function TqqqMddTrackerApp() {
-const [peakPrice, setPeakPrice] = useState(540);
+const [manualPeakPrice, setManualPeakPrice] = useState(540);
 const [currentPrice, setCurrentPrice] = useState(432);
 const [weeklyAutoBuy, setWeeklyAutoBuy] = useState(200000);
 const [cashReserve, setCashReserve] = useState(3000000);
+const [useAutoPrice, setUseAutoPrice] = useState(true);
+const [isLoading, setIsLoading] = useState(false);
+const [priceSource, setPriceSource] = useState('수동 입력');
+const [lastUpdated, setLastUpdated] = useState('');
 
 
 const [log, setLog] = useState([
@@ -47,10 +59,13 @@ const [newAmount, setNewAmount] = useState(200000);
 const [newMemo, setNewMemo] = useState('');
 
 
+const effectivePeak = useMemo(() => manualPeakPrice, [manualPeakPrice]);
+
+
 const mdd = useMemo(() => {
-if (!peakPrice || !currentPrice) return 0;
-return ((currentPrice - peakPrice) / peakPrice) * 100;
-}, [peakPrice, currentPrice]);
+if (!effectivePeak || !currentPrice) return 0;
+return ((currentPrice - effectivePeak) / effectivePeak) * 100;
+}, [effectivePeak, currentPrice]);
 
 
 const stage = getStage(mdd);
@@ -63,6 +78,9 @@ const autoLogged = useMemo(() => log.filter(x => x.type === '기본 자동매수
 const eventLogged = useMemo(() => log.filter(x => x.type !== '기본 자동매수').reduce((sum, item) => sum + item.amount, 0), [log]);
 
 
+const monthlyApprox = useMemo(() => Math.round((weeklyAutoBuy * 52) / 12), [weeklyAutoBuy]);
+
+
 const addLog = () => {
 if (!newDate || !newAmount) return;
 setLog(prev => [
@@ -73,9 +91,54 @@ setNewMemo('');
 };
 
 
+const addSuggestedBuyLog = () => {
+const today = new Date().toISOString().slice(0, 10);
+setLog(prev => [
+{
+date: today,
+type: mdd <= -20 ? '이벤트 추가매수' : '기본 자동매수',
+amount: suggestedBuy,
+memo: ${stage.label} / 권장매수 반영,
+},
+...prev,
+]);
+};
+
+
 const removeLog = (idx: number) => {
 setLog(prev => prev.filter((_, i) => i !== idx));
 };
+
+
+const fetchQqqPrice = async () => {
+setIsLoading(true);
+try {
+const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/QQQ');
+const data = await res.json();
+const meta = data?.chart?.result?.[0]?.meta;
+const price = meta?.regularMarketPrice;
+const previousClose = meta?.previousClose;
+const fiftyTwoWeekHigh = meta?.fiftyTwoWeekHigh;
+
+
+  if (price) setCurrentPrice(Number(price));
+  if (fiftyTwoWeekHigh) setManualPeakPrice(Number(fiftyTwoWeekHigh));
+  setPriceSource(previousClose ? 'Yahoo Finance 자동 반영' : '자동 반영');
+  setLastUpdated(new Date().toLocaleString('ko-KR'));
+} catch (e) {
+  setPriceSource('자동 반영 실패 · 수동 입력 사용');
+} finally {
+  setIsLoading(false);
+}
+
+
+
+};
+
+
+useEffect(() => {
+if (useAutoPrice) fetchQqqPrice();
+}, [useAutoPrice]);
 
 
 return (
@@ -86,26 +149,77 @@ return (
 
 
 
-QQQ MDD + 자동매수 대시보드
-
-
-QQQ 기준 MDD를 보고, 주간 자동매수와 이벤트 추가매수 로그를 한 화면에서 관리하는 너 전용 초단순 투자 앱 UI
 
 
 
 
+
+
+
+원일 전용
+QQQ MDD 기준
+
+
+
+자동매수 + MDD 투자 대시보드
+
+
+평소엔 자동매수만 유지하고, QQQ가 크게 빠질 때만 이벤트 추가매수 결정을 빠르게 내리는 초단순 UI
+
+
+
+
+
+<Button variant={useAutoPrice ? 'default' : 'outline'} className="rounded-2xl" onClick={() => setUseAutoPrice(true)}>
+자동 가격
+
+<Button variant={!useAutoPrice ? 'default' : 'outline'} className="rounded-2xl" onClick={() => setUseAutoPrice(false)}>
+수동 입력
+
+
+<RefreshCw className={mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}} />
+새로고침
+
+
+
+
+
+
+
+
+
+      <div className={`rounded-3xl border p-6 shadow-sm ${stage.tone}`}>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-sm font-semibold">지금 해야 할 행동</div>
+            <div className="mt-2 text-2xl font-bold">{getAlertLevel(mdd)}</div>
+            <p className="mt-2 text-sm opacity-90">{stage.note}</p>
+          </div>
+          <AlertTriangle className="h-8 w-8" />
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <div className="rounded-2xl bg-white/70 p-4">
+            <div className="text-xs text-slate-500">권장 매수</div>
+            <div className="mt-1 text-xl font-bold">{fmt(suggestedBuy)}원</div>
+          </div>
+          <div className="rounded-2xl bg-white/70 p-4">
+            <div className="text-xs text-slate-500">현재 MDD</div>
+            <div className="mt-1 text-xl font-bold">{pct(mdd)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="rounded-3xl shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><TrendingDown className="h-4 w-4" />현재 MDD</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><TrendingDown className="h-4 w-4" />QQQ MDD</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{pct(mdd)}</div>
           <div className="mt-2 flex items-center gap-2">
-            <Badge variant={stage.color}>{stage.label}</Badge>
+            <Badge variant={stage.variant}>{stage.label}</Badge>
           </div>
-          <p className="mt-3 text-sm text-slate-500">{stage.note}</p>
           <div className="mt-4 space-y-2">
             <Progress value={mddProgress} />
             <div className="flex justify-between text-xs text-slate-500">
@@ -118,58 +232,67 @@ QQQ 기준 MDD를 보고, 주간 자동매수와 이벤트 추가매수 로그�
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="rounded-3xl shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><Wallet className="h-4 w-4" />이번 주 권장 매수</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><Target className="h-4 w-4" />가격 상태</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div>
+            <div className="text-xs text-slate-500">QQQ 현재가</div>
+            <div className="text-2xl font-bold">${currentPrice.toFixed(2)}</div>
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">직전 최고가</div>
+            <div className="text-xl font-semibold">${effectivePeak.toFixed(2)}</div>
+          </div>
+          <div className="text-xs text-slate-500">{priceSource}{lastUpdated ? ` · ${lastUpdated}` : ''}</div>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-3xl shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><Wallet className="h-4 w-4" />자동매수 기준</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold">{fmt(suggestedBuy)}원</div>
-          <p className="mt-3 text-sm text-slate-500">기본 주간 자동매수 {fmt(weeklyAutoBuy)}원 기준</p>
-          <div className="mt-4 rounded-xl bg-slate-100 p-3 text-sm text-slate-700">
-            평시 {fmt(weeklyAutoBuy)}원 → -20% {fmt(Math.round(weeklyAutoBuy * 1.25))}원 → -30% {fmt(Math.round(weeklyAutoBuy * 1.5))}원 → -40% {fmt(weeklyAutoBuy * 2)}원
+          <div className="text-3xl font-bold">{fmt(weeklyAutoBuy)}원</div>
+          <p className="mt-2 text-sm text-slate-500">주간 자동매수 / 월 환산 약 {fmt(monthlyApprox)}원</p>
+          <div className="mt-4 rounded-2xl bg-slate-100 p-3 text-sm text-slate-700">
+            평시 {fmt(weeklyAutoBuy)}원<br />
+            -20% {fmt(Math.round(weeklyAutoBuy * 1.25))}원<br />
+            -30% {fmt(Math.round(weeklyAutoBuy * 1.5))}원<br />
+            -40% {fmt(weeklyAutoBuy * 2)}원
           </div>
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="rounded-3xl shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><CheckCircle2 className="h-4 w-4" />누적 매수 기록</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><BarChart3 className="h-4 w-4" />누적 매수</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{fmt(totalLogged)}원</div>
           <div className="mt-4 space-y-2 text-sm text-slate-600">
             <div className="flex justify-between"><span>기본 자동매수</span><span>{fmt(autoLogged)}원</span></div>
             <div className="flex justify-between"><span>이벤트 추가매수</span><span>{fmt(eventLogged)}원</span></div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="rounded-2xl shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600"><BellRing className="h-4 w-4" />현금 대기 자금</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">{fmt(cashReserve)}원</div>
-          <div className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
-            평소엔 안 쓰고, -20 / -30 / -40 알림 왔을 때만 이벤트 추가매수
+            <div className="flex justify-between"><span>대기 현금</span><span>{fmt(cashReserve)}원</span></div>
           </div>
         </CardContent>
       </Card>
     </div>
 
     <div className="grid gap-6 xl:grid-cols-5">
-      <Card className="rounded-2xl shadow-sm xl:col-span-2">
+      <Card className="rounded-3xl shadow-sm xl:col-span-2">
         <CardHeader>
-          <CardTitle>입력값</CardTitle>
+          <CardTitle>입력 / 설정</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">QQQ 직전 최고가 (달러)</label>
-            <Input type="number" value={peakPrice} onChange={(e) => setPeakPrice(Number(e.target.value))} />
+            <label className="text-sm font-medium">직전 최고가 (달러)</label>
+            <Input type="number" value={manualPeakPrice} onChange={(e) => setManualPeakPrice(Number(e.target.value))} disabled={useAutoPrice} />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">QQQ 현재가 / 전일종가 (달러)</label>
-            <Input type="number" value={currentPrice} onChange={(e) => setCurrentPrice(Number(e.target.value))} />
+            <label className="text-sm font-medium">QQQ 현재가 / 전일 종가 (달러)</label>
+            <Input type="number" value={currentPrice} onChange={(e) => setCurrentPrice(Number(e.target.value))} disabled={useAutoPrice} />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">주간 자동매수 금액 (원)</label>
@@ -180,18 +303,19 @@ QQQ 기준 MDD를 보고, 주간 자동매수와 이벤트 추가매수 로그�
             <Input type="number" value={cashReserve} onChange={(e) => setCashReserve(Number(e.target.value))} />
           </div>
           <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-            <div className="font-semibold">너 전용 룰 요약</div>
+            <div className="font-semibold">최종 룰</div>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li>기본은 주 20만원 자동매수</li>
-              <li>QQQ MDD 기준 -20 / -30 / -40 알림</li>
-              <li>알림 왔을 때만 이벤트 추가매수</li>
-              <li>평소에는 앱/위젯 안 보기</li>
+              <li>QQQ MDD -20 / -30 / -40 알림 대응</li>
+              <li>평소에는 앱 안 보고 자동매수만 유지</li>
+              <li>목돈 생기고 크게 빠졌을 때만 추가매수</li>
             </ul>
           </div>
+          <Button className="w-full rounded-2xl" onClick={addSuggestedBuyLog}>지금 권장매수 일지에 추가</Button>
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm xl:col-span-3">
+      <Card className="rounded-3xl shadow-sm xl:col-span-3">
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><CalendarDays className="h-5 w-5" />매수 일지</CardTitle>
         </CardHeader>
@@ -202,9 +326,9 @@ QQQ 기준 MDD를 보고, 주간 자동매수와 이벤트 추가매수 로그�
             <Input type="number" value={newAmount} onChange={(e) => setNewAmount(Number(e.target.value))} placeholder="금액" />
             <Input value={newMemo} onChange={(e) => setNewMemo(e.target.value)} placeholder="메모" />
           </div>
-          <Button className="rounded-xl" onClick={addLog}>기록 추가</Button>
+          <Button className="rounded-2xl" onClick={addLog}>기록 추가</Button>
 
-          <div className="overflow-hidden rounded-2xl border bg-white">
+          <div className="overflow-hidden rounded-3xl border bg-white">
             <div className="grid grid-cols-12 border-b bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-600">
               <div className="col-span-2">날짜</div>
               <div className="col-span-3">구분</div>
