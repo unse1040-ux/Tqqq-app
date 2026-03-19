@@ -444,8 +444,33 @@
 
       const portfolio = calcPortfolio(logs, tqqqPrice, currentPrice, usdkrw);
       const targetAmount = Number(settings.targetAmount || 0);
-      const targetProgress = targetAmount > 0 ? (portfolio.tqqqValueKRW / targetAmount) * 100 : 0;
+const targetProgress = targetAmount > 0 ? (portfolio.tqqqValueKRW / targetAmount) * 100 : 0;
+const remaining = Math.max(0, targetAmount - portfolio.tqqqValueKRW);
 
+let progressDisplay;
+if (targetProgress < 1) {
+  progressDisplay = targetProgress.toFixed(3);
+} else {
+  progressDisplay = targetProgress.toFixed(1);
+}
+
+$("targetProgressText").textContent = progressDisplay + "%";
+$("targetProgressSubText").textContent = "목표까지 " + fmt(remaining) + "원 남음";
+
+const etaYears = estimateYearsToTarget(
+  monthlyApprox,
+  annualRate,
+  portfolio.tqqqValueKRW,
+  targetAmount
+);
+
+if (targetAmount <= portfolio.tqqqValueKRW) {
+  $("targetEtaText").textContent = "이미 목표금액 도달";
+} else if (etaYears === null) {
+  $("targetEtaText").textContent = "현재 조건으로는 장기 추정 불가";
+} else {
+  $("targetEtaText").textContent = "현재 속도 기준 약 " + etaYears.toFixed(1) + "년 후 도달 예상";
+}
       $("baseBuy").value = settings.baseBuy;
       $("buy20").value = settings.buy20;
       $("buy30").value = settings.buy30;
