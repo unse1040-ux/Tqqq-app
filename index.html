@@ -438,7 +438,7 @@
       const stage = getStage(mdd);
       const suggestedBuy = getSuggestedBuy(mdd, settings);
 
-      const weeklyAutoBuy = Number(settings.baseBuy || 0) * 7;
+      const weeklyAutoBuy = Number(settings.baseBuy || 0) * 5;
       const monthlyApprox = Math.round((weeklyAutoBuy * 52) / 12);
       const projectedValue = calcProjection(monthlyApprox, annualRate, years);
 
