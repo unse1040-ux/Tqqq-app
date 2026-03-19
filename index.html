@@ -6,400 +6,59 @@
   <title>QQQ MDD Tracker</title>
   <style>
     :root{
-      --bg:#f3f6fb;
-      --card:#ffffff;
-      --text:#111827;
-      --sub:#6b7280;
-      --line:#e5e7eb;
-      --blue:#2563eb;
-      --blue-bg:#eff6ff;
-      --green:#059669;
-      --green-bg:#ecfdf5;
-      --amber:#b45309;
-      --amber-bg:#fffbeb;
-      --red:#dc2626;
-      --red-bg:#fef2f2;
-      --navy:#0f172a;
-      --shadow:0 10px 28px rgba(15,23,42,0.08);
-      --radius:20px;
+      --bg:#f3f6fb; --card:#fff; --text:#111827; --sub:#6b7280; --line:#e5e7eb;
+      --blue:#2563eb; --green:#059669; --amber:#b45309; --red:#dc2626; --navy:#0f172a;
+      --shadow:0 10px 28px rgba(15,23,42,.08); --radius:20px;
     }
-
-    * { box-sizing:border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.45;
-    }
-
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px;
-      padding-bottom:40px;
-    }
-
-    .hero{
-      background:linear-gradient(135deg,#ffffff 0%, #eef4ff 100%);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      margin-bottom:14px;
-    }
-
-    .hero h1{
-      margin:0 0 6px 0;
-      font-size:24px;
-      line-height:1.3;
-      word-break:keep-all;
-    }
-
-    .hero p{
-      margin:0;
-      color:var(--sub);
-      line-height:1.55;
-      font-size:13px;
-      word-break:keep-all;
-    }
-
-    .top-actions{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .grid{
-      display:grid;
-      gap:12px;
-    }
-
-    .grid-4{
-      grid-template-columns:repeat(4,1fr);
-    }
-
-    .grid-main{
-      grid-template-columns:1fr 1.35fr;
-      margin-top:12px;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-
-    .card h3{
-      margin:0 0 10px 0;
-      font-size:15px;
-      line-height:1.35;
-      word-break:keep-all;
-    }
-
-    .label{
-      font-size:12px;
-      color:var(--sub);
-      margin-bottom:6px;
-    }
-
-    .value-xl{
-      font-size:24px;
-      font-weight:800;
-      line-height:1.15;
-    }
-
-    .value-lg{
-      font-size:18px;
-      font-weight:700;
-      line-height:1.2;
-    }
-
-    .muted{
-      color:var(--sub);
-      font-size:12px;
-      line-height:1.5;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:7px 11px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:700;
-      border:1px solid transparent;
-      white-space:nowrap;
-    }
-
-    .badge-green{ background:var(--green-bg); color:var(--green); }
-    .badge-blue{ background:var(--blue-bg); color:var(--blue); }
-    .badge-amber{ background:var(--amber-bg); color:var(--amber); }
-    .badge-red{ background:var(--red-bg); color:var(--red); }
-
-    .action-box{
-      border-radius:22px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      border:1px solid var(--line);
-      background:#fff;
-      margin-top:12px;
-    }
-
-    .action-title{
-      font-size:12px;
-      font-weight:700;
-      color:var(--sub);
-    }
-
-    .action-main{
-      margin-top:6px;
-      font-size:20px;
-      font-weight:800;
-      line-height:1.35;
-      word-break:keep-all;
-    }
-
-    .action-note{
-      margin-top:6px;
-      font-size:13px;
-      color:var(--sub);
-    }
-
-    .pill-row{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .field{
-      margin-bottom:12px;
-    }
-
-    input, select, button, textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px 14px;
-      font-size:16px;
-      background:#fff;
-      font-family:inherit;
-      min-height:48px;
-    }
-
-    textarea{
-      min-height:96px;
-      resize:vertical;
-    }
-
-    button{
-      cursor:pointer;
-      font-weight:700;
-      border:none;
-      background:var(--navy);
-      color:#fff;
-    }
-
-    button.secondary{
-      background:#eef2ff;
-      color:#1e3a8a;
-      border:1px solid #c7d2fe;
-    }
-
-    button.ghost{
-      background:#fff;
-      color:var(--text);
-      border:1px solid var(--line);
-    }
-
-    .two{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .three{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:10px;
-    }
-
-    .mini{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .mini-card{
-      background:#f8fafc;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-    }
-
-    .mini-card .k{
-      font-size:12px;
-      color:var(--sub);
-    }
-
-    .mini-card .v{
-      margin-top:4px;
-      font-size:18px;
-      font-weight:800;
-      line-height:1.2;
-      word-break:break-all;
-    }
-
-    .progress-wrap{
-      margin-top:12px;
-    }
-
-    .progress{
-      height:12px;
-      width:100%;
-      background:#e5e7eb;
-      border-radius:999px;
-      overflow:hidden;
-      position:relative;
-    }
-
-    .bar{
-      height:100%;
-      width:0%;
-      background:linear-gradient(90deg,#60a5fa 0%, #f59e0b 55%, #ef4444 100%);
-      transition:width .25s ease;
-      min-width:8px;
-    }
-
-    .small-list{
-      margin:0;
-      padding-left:18px;
-      color:var(--sub);
-      line-height:1.7;
-      font-size:13px;
-    }
-
-    .sim-box{
-      margin-top:12px;
-      background:#ecfdf5;
-      color:#065f46;
-      border:1px solid #a7f3d0;
-      border-radius:16px;
-      padding:14px;
-    }
-
-    .sim-box .big{
-      font-size:24px;
-      font-weight:800;
-      margin-top:6px;
-      line-height:1.2;
-      word-break:break-all;
-    }
-
-    .chart-box{
-      margin-top:10px;
-      padding:8px 0 2px;
-    }
-
-    .chart{
-      display:flex;
-      align-items:flex-end;
-      gap:5px;
-      height:72px;
-      padding:0 2px;
-    }
-
-    .chart-bar{
-      flex:1;
-      background:linear-gradient(180deg,#93c5fd 0%, #2563eb 100%);
-      border-radius:8px 8px 0 0;
-      min-width:8px;
-    }
-
-    .chart-labels{
-      display:flex;
-      justify-content:space-between;
-      margin-top:6px;
-      font-size:11px;
-      color:var(--sub);
-      padding:0 2px;
-    }
-
-    .log-table{
-      width:100%;
-      border-collapse:collapse;
-      border-radius:18px;
-      overflow:hidden;
-    }
-
-    .log-table th,
-    .log-table td{
-      padding:10px 8px;
-      border-bottom:1px solid var(--line);
-      text-align:left;
-      font-size:13px;
-      vertical-align:top;
-    }
-
-    .log-table th{
-      color:var(--sub);
-      background:#f8fafc;
-      font-size:12px;
-      letter-spacing:0.1px;
-      position:sticky;
-      top:0;
-      z-index:1;
-    }
-
-    .danger-btn{
-      background:#fff;
-      color:var(--red);
-      border:1px solid #fecaca;
-      padding:7px 10px;
-      border-radius:12px;
-      width:auto;
-      min-height:auto;
-      font-size:12px;
-    }
-
-    .right{ text-align:right; }
-
-    @media (max-width: 900px){
-      .grid-4,
-      .grid-main,
-      .two,
-      .three{
-        grid-template-columns:1fr;
-      }
-
-      .wrap{ padding:12px; }
-      .hero{ padding:16px; border-radius:22px; }
-      .hero h1{ font-size:22px; }
-      .card{ padding:15px; }
-      .value-xl{ font-size:22px; }
-      .value-lg{ font-size:18px; }
-      .action-main{ font-size:18px; }
-      .mini{ grid-template-columns:1fr 1fr; }
-      .top-actions{ grid-template-columns:1fr; }
-
-      .log-table{
-        display:block;
-        overflow-x:auto;
-        white-space:nowrap;
-      }
-
-      .log-table th:nth-child(4),
-      .log-table td:nth-child(4){
-        display:none;
-      }
+    *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+    .wrap{max-width:1150px;margin:0 auto;padding:14px;padding-bottom:40px}
+    .hero,.card,.action-box{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+    .hero{border-radius:24px;padding:18px}
+    .hero h1{margin:0 0 6px;font-size:24px;line-height:1.3}
+    .hero p{margin:0;color:var(--sub);font-size:13px;line-height:1.55}
+    .top-actions{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .grid{display:grid;gap:12px}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-main{grid-template-columns:1fr 1.35fr;margin-top:12px}
+    .card{border-radius:20px;padding:16px}.card h3{margin:0 0 10px;font-size:15px}
+    .action-box{border-radius:22px;padding:18px;margin-top:12px}
+    .action-title{font-size:12px;font-weight:700;color:var(--sub)}
+    .action-main{margin-top:6px;font-size:20px;font-weight:800;line-height:1.35}
+    .action-note{margin-top:6px;font-size:13px;color:var(--sub)}
+    .mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .mini-card{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:12px}
+    .mini-card .k{font-size:12px;color:var(--sub)} .mini-card .v{margin-top:4px;font-size:18px;font-weight:800;line-height:1.2;word-break:break-all}
+    .label{font-size:12px;color:var(--sub);margin-bottom:6px}
+    .value-xl{font-size:24px;font-weight:800;line-height:1.15}.value-lg{font-size:18px;font-weight:700;line-height:1.2}
+    .muted{color:var(--sub);font-size:12px;line-height:1.5}
+    .badge{display:inline-flex;align-items:center;justify-content:center;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+    .badge-green{background:#ecfdf5;color:#059669}.badge-blue{background:#eff6ff;color:#2563eb}.badge-amber{background:#fffbeb;color:#b45309}.badge-red{background:#fef2f2;color:#dc2626}
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .progress-wrap{margin-top:12px}.progress{height:12px;width:100%;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar{height:100%;width:0%;background:linear-gradient(90deg,#60a5fa 0%,#f59e0b 55%,#ef4444 100%);min-width:8px}
+    .field{margin-bottom:12px}
+    input,select,button,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;background:#fff;font-family:inherit;min-height:48px}
+    textarea{min-height:96px;resize:vertical}
+    button{cursor:pointer;font-weight:700;border:none;background:var(--navy);color:#fff}
+    button.secondary{background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe} button.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .sim-box{margin-top:12px;border-radius:16px;padding:14px}.sim-green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}.sim-blue{background:#eff6ff;color:#1e3a8a;border:1px solid #bfdbfe}
+    .sim-box .big{font-size:24px;font-weight:800;margin-top:6px;line-height:1.2;word-break:break-all}
+    .chart-box{margin-top:10px;padding:8px 0 2px}.chart{display:flex;align-items:flex-end;gap:5px;height:72px;padding:0 2px}.chart-bar{flex:1;background:linear-gradient(180deg,#93c5fd 0%,#2563eb 100%);border-radius:8px 8px 0 0;min-width:8px}
+    .chart-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--sub);padding:0 2px}
+    .compare-wrap{margin-top:12px}
+    .compare-row{margin-bottom:10px}
+    .compare-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+    .compare-bar-bg{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+    .compare-bar{height:100%;border-radius:999px}
+    .bar-invested{background:#94a3b8}.bar-tqqq{background:#2563eb}.bar-qqq{background:#10b981}
+    .log-table{width:100%;border-collapse:collapse;border-radius:18px;overflow:hidden}
+    .log-table th,.log-table td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}
+    .log-table th{color:var(--sub);background:#f8fafc;font-size:12px;position:sticky;top:0;z-index:1}
+    .danger-btn{background:#fff;color:#dc2626;border:1px solid #fecaca;padding:7px 10px;border-radius:12px;width:auto;min-height:auto;font-size:12px}
+    .right{text-align:right}
+    @media (max-width:900px){
+      .grid-4,.grid-main,.two,.three,.top-actions{grid-template-columns:1fr}
+      .wrap{padding:12px}.hero h1{font-size:22px}.value-xl{font-size:22px}.value-lg{font-size:18px}.action-main{font-size:18px}
+      .log-table{display:block;overflow-x:auto;white-space:nowrap}
     }
   </style>
 </head>
@@ -407,11 +66,7 @@
   <div class="wrap">
     <div class="hero">
       <h1>QQQ MDD + 자동매수 대시보드</h1>
-      <p>
-        QQQ 가격 자동반영, 52주 고점 자동반영, MDD 자동계산, TQQQ 체감 하락률,
-        목표 자산 시뮬레이터, 누적평단/평가금액까지 한 화면에서 보는 개인용 투자 앱.
-      </p>
-
+      <p>QQQ 가격 자동반영, TQQQ 실제 가격, 환율 반영 수량/평단/평가금액, 목표금액 달성률, TQQQ vs QQQ 비교까지 한 화면에서 보는 개인용 앱.</p>
       <div class="top-actions">
         <button id="refreshPriceBtn" class="secondary">가격 새로고침</button>
         <button id="toggleAutoRefreshBtn" class="ghost">10분 자동갱신 ON</button>
@@ -422,16 +77,9 @@
       <div class="action-title">지금 해야 할 행동</div>
       <div id="actionMain" class="action-main">자동매수만 유지</div>
       <div id="actionNote" class="action-note">평시 구간</div>
-
       <div class="mini">
-        <div class="mini-card">
-          <div class="k">현재 MDD</div>
-          <div class="v" id="mddBig">0.0%</div>
-        </div>
-        <div class="mini-card">
-          <div class="k">이번 주 권장 매수</div>
-          <div class="v" id="suggestedBuyBig">40,000원</div>
-        </div>
+        <div class="mini-card"><div class="k">현재 MDD</div><div class="v" id="mddBig">0.0%</div></div>
+        <div class="mini-card"><div class="k">이번 주 권장 매수</div><div class="v" id="suggestedBuyBig">40,000원</div></div>
       </div>
     </div>
 
@@ -439,9 +87,7 @@
       <div class="card">
         <h3>QQQ MDD</h3>
         <div id="mddText" class="value-xl">0.0%</div>
-        <div class="pill-row">
-          <span id="stageBadge" class="badge badge-green">평시 구간</span>
-        </div>
+        <div class="pill-row"><span id="stageBadge" class="badge badge-green">평시 구간</span></div>
         <div class="progress-wrap">
           <div class="progress"><div id="mddBar" class="bar"></div></div>
           <div class="muted" style="margin-top:8px;">0% / -20% / -30% / -40%</div>
@@ -451,24 +97,20 @@
       <div class="card">
         <h3>TQQQ 체감 하락</h3>
         <div id="tqqqShockText" class="value-xl">0.0%</div>
-        <div class="muted" style="margin-top:10px;">
-          QQQ MDD × 3 단순 환산<br>
-          멘탈 체크용 참고 지표
-        </div>
+        <div class="muted" style="margin-top:10px;">QQQ MDD × 3 단순 환산</div>
       </div>
 
       <div class="card">
         <h3>가격 상태</h3>
         <div class="label">QQQ 현재가</div>
         <div id="currentPriceText" class="value-lg">$0.00</div>
-
-        <div class="label" style="margin-top:14px;">직전 최고가 (52주 고점)</div>
+        <div class="label" style="margin-top:12px;">QQQ 52주 고점</div>
         <div id="peakPriceText" class="value-lg">$0.00</div>
-
-<div class="label" style="margin-top:14px;">TQQQ 현재가</div>
-<div id="estimatedTqqqText" class="value-lg">$0.00</div>
-
-        <div id="updatedAtText" class="muted" style="margin-top:14px;">자동 반영 대기중</div>
+        <div class="label" style="margin-top:12px;">TQQQ 현재가</div>
+        <div id="tqqqPriceText" class="value-lg">$0.00</div>
+        <div class="label" style="margin-top:12px;">USD/KRW 환율</div>
+        <div id="usdkrwText" class="value-lg">₩0</div>
+        <div id="updatedAtText" class="muted" style="margin-top:12px;">자동 반영 대기중</div>
       </div>
 
       <div class="card">
@@ -476,10 +118,7 @@
         <div id="weeklyAutoBuyText" class="value-xl">280,000원</div>
         <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 1,213,333원</div>
         <div class="muted" style="margin-top:14px; line-height:1.7;">
-          기본 4만원<br>
-          -20% 6만원<br>
-          -30% 8만원<br>
-          -40% 10만원
+          기본 4만원<br>-20% 6만원<br>-30% 8만원<br>-40% 10만원
         </div>
       </div>
     </div>
@@ -489,87 +128,40 @@
         <div class="card">
           <h3>입력 / 설정</h3>
 
-          <div class="field">
-            <div class="label">기본 매수금액 (원)</div>
-            <input id="baseBuy" type="number" step="1000" />
-          </div>
-
-          <div class="field">
-            <div class="label">-20% 이벤트 금액 (원)</div>
-            <input id="buy20" type="number" step="1000" />
-          </div>
-
-          <div class="field">
-            <div class="label">-30% 이벤트 금액 (원)</div>
-            <input id="buy30" type="number" step="1000" />
-          </div>
-
-          <div class="field">
-            <div class="label">-40% 이벤트 금액 (원)</div>
-            <input id="buy40" type="number" step="1000" />
-          </div>
-
-          <div class="field">
-            <div class="label">대기 현금 (원)</div>
-            <input id="cashReserve" type="number" step="1000" />
-          </div>
-
-          <div class="field">
-            <div class="label">연 기대수익률 (예: 0.15 = 15%)</div>
-            <input id="annualRate" type="number" step="0.01" />
-          </div>
-
-          <div class="field">
-            <div class="label">시뮬 기간 (년)</div>
-            <input id="years" type="number" step="1" />
-          </div>
-
-          <div class="field">
-            <div class="label">목표 금액 (원)</div>
-            <input id="targetAmount" type="number" step="1000000" />
-          </div>
+          <div class="field"><div class="label">기본 매수금액 (원)</div><input id="baseBuy" type="number" step="1000"></div>
+          <div class="field"><div class="label">-20% 이벤트 금액 (원)</div><input id="buy20" type="number" step="1000"></div>
+          <div class="field"><div class="label">-30% 이벤트 금액 (원)</div><input id="buy30" type="number" step="1000"></div>
+          <div class="field"><div class="label">-40% 이벤트 금액 (원)</div><input id="buy40" type="number" step="1000"></div>
+          <div class="field"><div class="label">대기 현금 (원)</div><input id="cashReserve" type="number" step="1000"></div>
+          <div class="field"><div class="label">연 기대수익률 (예: 0.15 = 15%)</div><input id="annualRate" type="number" step="0.01"></div>
+          <div class="field"><div class="label">시뮬 기간 (년)</div><input id="years" type="number" step="1"></div>
+          <div class="field"><div class="label">목표 금액 (원)</div><input id="targetAmount" type="number" step="1000000"></div>
 
           <div class="two">
             <button id="saveSettingsBtn">설정 저장</button>
             <button id="addSuggestedBtn" class="secondary">권장매수 일지 추가</button>
           </div>
 
-          <div class="sim-box">
+          <div class="sim-box sim-green">
             <div class="label" style="color:#065f46;">예상 최종 자산</div>
             <div id="projectedValueText" class="big">0원</div>
-            <div class="muted" style="margin-top:6px; color:#065f46;">
-              월 자동매수 기준 단순 복리 추정
-            </div>
+            <div class="muted" style="margin-top:6px;color:#065f46;">월 자동매수 기준 단순 복리 추정</div>
           </div>
 
-          <div class="sim-box" style="margin-top:12px; background:#eff6ff; color:#1e3a8a; border-color:#bfdbfe;">
+          <div class="sim-box sim-blue">
             <div class="label" style="color:#1e3a8a;">목표금액 달성률</div>
             <div id="targetProgressText" class="big">0.0%</div>
-            <div class="muted" style="margin-top:6px; color:#1e3a8a;">
-              현재 평가금액 ÷ 목표금액
-            </div>
+            <div class="muted" style="margin-top:6px;color:#1e3a8a;">현재 TQQQ 평가금액 ÷ 목표금액</div>
           </div>
         </div>
 
         <div class="card" style="margin-top:16px;">
           <h3>보유 현황</h3>
           <div class="mini">
-            <div class="mini-card">
-              <div class="k">누적 수량</div>
-              <div class="v" id="totalUnitsText">0.0000</div>
-            </div>
-            <div class="mini-card">
-              <div class="k">누적 평단</div>
-              <div class="v" id="avgPriceText">$0.00</div>
-            </div>
-            <div class="mini-card">
-              <div class="k">현재 평가금액</div>
-              <div class="v" id="marketValueText">0원</div>
-            </div>
-            <div class="mini-card">
-              <div class="k">평가손익</div>
-              <div class="v" id="profitLossText">0원</div>
-            </div>
+            <div class="mini-card"><div class="k">누적 수량</div><div class="v" id="totalUnitsText">0.0000</div></div>
+            <div class="mini-card"><div class="k">누적 평단</div><div class="v" id="avgPriceText">$0.00</div></div>
+            <div class="mini-card"><div class="k">현재 평가금액</div><div class="v" id="marketValueText">0원</div></div>
+            <div class="mini-card"><div class="k">평가손익</div><div class="v" id="profitLossText">0원</div></div>
           </div>
         </div>
       </div>
@@ -578,12 +170,26 @@
         <div class="card">
           <h3>MDD 히스토리</h3>
           <div class="muted">최근 저장된 스냅샷 기준</div>
-
           <div class="chart-box">
             <div id="mddChart" class="chart"></div>
-            <div class="chart-labels">
-              <span>이전</span>
-              <span>최근</span>
+            <div class="chart-labels"><span>이전</span><span>최근</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <h3>TQQQ vs QQQ 비교</h3>
+          <div class="compare-wrap">
+            <div class="compare-row">
+              <div class="compare-label"><span>총 투자금</span><span id="investedCompareText">0원</span></div>
+              <div class="compare-bar-bg"><div id="investedBar" class="compare-bar bar-invested" style="width:0%"></div></div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-label"><span>TQQQ 현재 평가금액</span><span id="tqqqCompareText">0원</span></div>
+              <div class="compare-bar-bg"><div id="tqqqBar" class="compare-bar bar-tqqq" style="width:0%"></div></div>
+            </div>
+            <div class="compare-row">
+              <div class="compare-label"><span>같은 금액으로 QQQ 샀을 때</span><span id="qqqCompareText">0원</span></div>
+              <div class="compare-bar-bg"><div id="qqqBar" class="compare-bar bar-qqq" style="width:0%"></div></div>
             </div>
           </div>
         </div>
@@ -592,10 +198,7 @@
           <h3>매수 일지</h3>
 
           <div class="three">
-            <div class="field">
-              <div class="label">날짜</div>
-              <input id="logDate" type="date" />
-            </div>
+            <div class="field"><div class="label">날짜</div><input id="logDate" type="date"></div>
             <div class="field">
               <div class="label">구분</div>
               <select id="logType">
@@ -604,21 +207,22 @@
                 <option>기타 추가매수</option>
               </select>
             </div>
+            <div class="field"><div class="label">금액 (원)</div><input id="logAmount" type="number" step="1000"></div>
+          </div>
+
+          <div class="two">
             <div class="field">
-              <div class="label">금액</div>
-              <input id="logAmount" type="number" step="1000" />
+              <div class="label">TQQQ 체결가 (비우면 날짜 기준 자동입력)</div>
+              <input id="logTqqqPrice" type="number" step="0.01">
+            </div>
+            <div class="field">
+              <div class="label">QQQ 비교가 (비우면 날짜 기준 자동입력)</div>
+              <input id="logQqqPrice" type="number" step="0.01">
             </div>
           </div>
 
-          <div class="field">
-            <div class="label">TQQQ 체결가 (비우면 자동으로 현재 예상가 사용)</div>
-            <input id="logTqqqPrice" type="number" step="0.01" />
-          </div>
-
-          <div class="field">
-            <div class="label">메모</div>
-            <textarea id="logMemo" rows="3" placeholder="메모 입력"></textarea>
-          </div>
+          <div class="field"><div class="label">환율 (비우면 날짜 기준 자동입력)</div><input id="logFx" type="number" step="0.01"></div>
+          <div class="field"><div class="label">메모</div><textarea id="logMemo" rows="3" placeholder="메모 입력"></textarea></div>
 
           <div class="two">
             <button id="addLogBtn">기록 추가</button>
@@ -634,6 +238,7 @@
                   <th>금액</th>
                   <th>TQQQ가</th>
                   <th>수량</th>
+                  <th>개별수익률</th>
                   <th>삭제</th>
                 </tr>
               </thead>
@@ -659,7 +264,8 @@
       targetAmount: 1000000000,
       peakPrice: 0,
       currentPrice: 0,
-      estimatedTqqqPrice: 0,
+      tqqqPrice: 0,
+      usdkrw: 1350,
       updatedAt: "",
       autoRefreshOn: true,
       history: [],
@@ -668,50 +274,15 @@
 
     let autoRefreshTimer = null;
 
-    function fmt(n){
-      return new Intl.NumberFormat("ko-KR").format(Math.round(Number(n) || 0));
-    }
-
-    function getSettings(){
-      const saved = localStorage.getItem("mddTrackerSettings");
-      return saved ? JSON.parse(saved) : defaults;
-    }
-
-    function saveSettings(data){
-      localStorage.setItem("mddTrackerSettings", JSON.stringify(data));
-    }
+    function fmt(n){ return new Intl.NumberFormat("ko-KR").format(Math.round(Number(n) || 0)); }
+    function getSettings(){ const saved = localStorage.getItem("mddTrackerSettings"); return saved ? JSON.parse(saved) : defaults; }
+    function saveSettings(data){ localStorage.setItem("mddTrackerSettings", JSON.stringify(data)); }
 
     function getStage(mdd){
-      if (mdd <= -40) {
-        return {
-          badge:"-40% 핵심 구간",
-          badgeClass:"badge-red",
-          action:"지금 강한 추가매수 검토",
-          note:"핵심 이벤트 구간. 강하게 대응할지 검토"
-        };
-      }
-      if (mdd <= -30) {
-        return {
-          badge:"-30% 본격 구간",
-          badgeClass:"badge-amber",
-          action:"이벤트 추가매수 실행 구간",
-          note:"본격 추가매수 구간"
-        };
-      }
-      if (mdd <= -20) {
-        return {
-          badge:"-20% 진입 구간",
-          badgeClass:"badge-blue",
-          action:"가벼운 추가매수 가능 구간",
-          note:"소액 이벤트 매수 검토"
-        };
-      }
-      return {
-        badge:"평시 구간",
-        badgeClass:"badge-green",
-        action:"자동매수만 유지",
-        note:"평소처럼 자동매수만 유지"
-      };
+      if (mdd <= -40) return { badge:"-40% 핵심 구간", badgeClass:"badge-red", action:"지금 강한 추가매수 검토", note:"핵심 이벤트 구간. 강하게 대응할지 검토" };
+      if (mdd <= -30) return { badge:"-30% 본격 구간", badgeClass:"badge-amber", action:"이벤트 추가매수 실행 구간", note:"본격 추가매수 구간" };
+      if (mdd <= -20) return { badge:"-20% 진입 구간", badgeClass:"badge-blue", action:"가벼운 추가매수 가능 구간", note:"소액 이벤트 매수 검토" };
+      return { badge:"평시 구간", badgeClass:"badge-green", action:"자동매수만 유지", note:"평소처럼 자동매수만 유지" };
     }
 
     function getSuggestedBuy(mdd, settings){
@@ -729,60 +300,69 @@
     }
 
     async function fetchPrices(){
-  try {
-    $("updatedAtText").textContent = "가격 불러오는 중...";
+      try {
+        $("updatedAtText").textContent = "가격 불러오는 중...";
 
-    const [qqqRes, tqqqRes] = await Promise.all([
-      fetch("/api/qqq"),
-      fetch("/api/tqqq")
-    ]);
+        const [qqqRes, tqqqRes, fxRes] = await Promise.all([
+          fetch("/api/qqq"),
+          fetch("/api/tqqq"),
+          fetch("/api/usdkrw")
+        ]);
 
-    const qqqData = await qqqRes.json();
-    const tqqqData = await tqqqRes.json();
+        const qqqData = await qqqRes.json();
+        const tqqqData = await tqqqRes.json();
+        const fxData = await fxRes.json();
 
-    if (!qqqRes.ok || qqqData.error) {
-      throw new Error(qqqData.error || "QQQ 가격 조회 실패");
+        if (!qqqRes.ok || qqqData.error) throw new Error(qqqData.error || "QQQ 가격 조회 실패");
+        if (!tqqqRes.ok || tqqqData.error) throw new Error(tqqqData.error || "TQQQ 가격 조회 실패");
+        if (!fxRes.ok || fxData.error) throw new Error(fxData.error || "환율 조회 실패");
+
+        const settings = getSettings();
+        settings.currentPrice = Number(qqqData.currentPrice || 0);
+        settings.peakPrice = Number(qqqData.peakPrice || 0);
+        settings.tqqqPrice = Number(tqqqData.currentPrice || 0);
+        settings.usdkrw = Number(fxData.currentPrice || 0);
+        settings.updatedAt = qqqData.updatedAt || new Date().toISOString();
+
+        const mdd = settings.peakPrice ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100 : 0;
+        settings.history = settings.history || [];
+        settings.history.push({ date: settings.updatedAt, mdd: Number(mdd.toFixed(2)) });
+        settings.history = settings.history.slice(-20);
+
+        saveSettings(settings);
+        render();
+      } catch (e) {
+        $("updatedAtText").textContent = "가격 자동반영 실패";
+        console.error(e);
+      }
     }
 
-    if (!tqqqRes.ok || tqqqData.error) {
-      throw new Error(tqqqData.error || "TQQQ 가격 조회 실패");
+    async function autoFillTradePrices(date){
+      if (!date) return;
+      try {
+        const [tRes, qRes, fRes] = await Promise.all([
+          fetch(`/api/tqqq-history?date=${date}`),
+          fetch(`/api/qqq-history?date=${date}`),
+          fetch(`/api/usdkrw-history?date=${date}`)
+        ]);
+
+        const tData = await tRes.json();
+        const qData = await qRes.json();
+        const fData = await fRes.json();
+
+        if (tData.close && !$("logTqqqPrice").value) $("logTqqqPrice").value = Number(tData.close).toFixed(2);
+        if (qData.close && !$("logQqqPrice").value) $("logQqqPrice").value = Number(qData.close).toFixed(2);
+        if (fData.close && !$("logFx").value) $("logFx").value = Number(fData.close).toFixed(2);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
-    const settings = getSettings();
-    settings.currentPrice = Number(qqqData.currentPrice || 0);
-    settings.peakPrice = Number(qqqData.peakPrice || 0);
-    settings.estimatedTqqqPrice = Number(tqqqData.currentPrice || 0);
-    settings.updatedAt = qqqData.updatedAt || new Date().toISOString();
-
-    const mdd = settings.peakPrice
-      ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100
-      : 0;
-
-    settings.history = settings.history || [];
-    settings.history.push({
-      date: settings.updatedAt,
-      mdd: Number(mdd.toFixed(2))
-    });
-    settings.history = settings.history.slice(-20);
-
-    saveSettings(settings);
-    render();
-  } catch (e) {
-    $("updatedAtText").textContent = "가격 자동반영 실패";
-    console.error(e);
-  }
-}
-    
     function renderChart(history){
       const chart = $("mddChart");
       chart.innerHTML = "";
-
-      const data = history && history.length ? history : [
-        { mdd: -6.6 }, { mdd: -5.8 }, { mdd: -7.2 }, { mdd: -6.4 }, { mdd: -6.6 }
-      ];
-
+      const data = history && history.length ? history : [{mdd:-6.6},{mdd:-5.8},{mdd:-7.2},{mdd:-6.4},{mdd:-6.6}];
       const maxAbs = Math.max(...data.map(x => Math.abs(Number(x.mdd || 0))), 1);
-
       data.forEach(item => {
         const v = Math.abs(Number(item.mdd || 0));
         const h = Math.max(8, Math.round((v / maxAbs) * 70));
@@ -794,30 +374,49 @@
       });
     }
 
-    function calcPortfolio(logs, currentTqqqPrice){
-      let totalAmount = 0;
-      let totalUnits = 0;
+    function calcPortfolio(logs, currentTqqqPrice, currentQqqPrice, currentFx){
+      let totalAmountKRW = 0;
+      let totalTqqqUnits = 0;
+      let totalQqqUnits = 0;
 
       logs.forEach(log => {
-        const amount = Number(log.amount || 0);
-        const price = Number(log.tqqqPrice || 0);
-        if (amount > 0 && price > 0) {
-          totalAmount += amount;
-          totalUnits += amount / price;
+        const amountKRW = Number(log.amount || 0);
+        const tqqqPrice = Number(log.tqqqPrice || 0);
+        const qqqPrice = Number(log.qqqPrice || 0);
+        const fx = Number(log.fx || 0);
+
+        if (amountKRW > 0 && fx > 0) {
+          if (tqqqPrice > 0) totalTqqqUnits += amountKRW / (tqqqPrice * fx);
+          if (qqqPrice > 0) totalQqqUnits += amountKRW / (qqqPrice * fx);
+          totalAmountKRW += amountKRW;
         }
       });
 
-      const avgPrice = totalUnits > 0 ? totalAmount / totalUnits : 0;
-      const marketValue = totalUnits * currentTqqqPrice;
-      const profitLoss = marketValue - totalAmount;
+      const avgTqqqPrice = totalTqqqUnits > 0 ? (totalAmountKRW / currentFx) / totalTqqqUnits : 0;
+      const tqqqValueKRW = totalTqqqUnits * currentTqqqPrice * currentFx;
+      const qqqValueKRW = totalQqqUnits * currentQqqPrice * currentFx;
+      const tqqqProfitKRW = tqqqValueKRW - totalAmountKRW;
 
       return {
-        totalAmount,
-        totalUnits,
-        avgPrice,
-        marketValue,
-        profitLoss
+        totalAmountKRW,
+        totalTqqqUnits,
+        totalQqqUnits,
+        avgTqqqPrice,
+        tqqqValueKRW,
+        qqqValueKRW,
+        tqqqProfitKRW
       };
+    }
+
+    function renderCompare(totalInvested, tqqqValue, qqqValue){
+      const maxVal = Math.max(totalInvested, tqqqValue, qqqValue, 1);
+      $("investedCompareText").textContent = fmt(totalInvested) + "원";
+      $("tqqqCompareText").textContent = fmt(tqqqValue) + "원";
+      $("qqqCompareText").textContent = fmt(qqqValue) + "원";
+
+      $("investedBar").style.width = (totalInvested / maxVal * 100) + "%";
+      $("tqqqBar").style.width = (tqqqValue / maxVal * 100) + "%";
+      $("qqqBar").style.width = (qqqValue / maxVal * 100) + "%";
     }
 
     function render(){
@@ -825,7 +424,8 @@
 
       const peakPrice = Number(settings.peakPrice) || 0;
       const currentPrice = Number(settings.currentPrice) || 0;
-      const estimatedTqqqPrice = Number(settings.estimatedTqqqPrice) || 0;
+      const tqqqPrice = Number(settings.tqqqPrice) || 0;
+      const usdkrw = Number(settings.usdkrw) || 0;
       const annualRate = Number(settings.annualRate) || 0;
       const years = Number(settings.years) || 0;
       const logs = settings.logs || [];
@@ -838,13 +438,13 @@
       const stage = getStage(mdd);
       const suggestedBuy = getSuggestedBuy(mdd, settings);
 
-      const weeklyAutoBuy = Number(settings.baseBuy || 0) * 5;
+      const weeklyAutoBuy = Number(settings.baseBuy || 0) * 7;
       const monthlyApprox = Math.round((weeklyAutoBuy * 52) / 12);
       const projectedValue = calcProjection(monthlyApprox, annualRate, years);
 
-      const portfolio = calcPortfolio(logs, estimatedTqqqPrice);
+      const portfolio = calcPortfolio(logs, tqqqPrice, currentPrice, usdkrw);
       const targetAmount = Number(settings.targetAmount || 0);
-      const targetProgress = targetAmount > 0 ? (portfolio.marketValue / targetAmount) * 100 : 0;
+      const targetProgress = targetAmount > 0 ? (portfolio.tqqqValueKRW / targetAmount) * 100 : 0;
 
       $("baseBuy").value = settings.baseBuy;
       $("buy20").value = settings.buy20;
@@ -860,7 +460,8 @@
       $("tqqqShockText").textContent = tqqqShock.toFixed(1) + "%";
       $("currentPriceText").textContent = currentPrice ? "$" + currentPrice.toFixed(2) : "-";
       $("peakPriceText").textContent = peakPrice ? "$" + peakPrice.toFixed(2) : "-";
-      $("estimatedTqqqText").textContent = estimatedTqqqPrice ? "$" + estimatedTqqqPrice.toFixed(2) : "-";
+      $("tqqqPriceText").textContent = tqqqPrice ? "$" + tqqqPrice.toFixed(2) : "-";
+      $("usdkrwText").textContent = usdkrw ? "₩" + fmt(usdkrw) : "-";
 
       $("weeklyAutoBuyText").textContent = fmt(weeklyAutoBuy) + "원";
       $("monthlyApproxText").textContent = "월 환산 약 " + fmt(monthlyApprox) + "원";
@@ -868,14 +469,12 @@
       $("projectedValueText").textContent = fmt(projectedValue) + "원";
       $("targetProgressText").textContent = targetProgress.toFixed(1) + "%";
 
-      $("totalUnitsText").textContent = portfolio.totalUnits.toFixed(4);
-      $("avgPriceText").textContent = "$" + portfolio.avgPrice.toFixed(2);
-      $("marketValueText").textContent = fmt(portfolio.marketValue) + "원";
-      $("profitLossText").textContent = (portfolio.profitLoss >= 0 ? "+" : "") + fmt(portfolio.profitLoss) + "원";
+      $("totalUnitsText").textContent = portfolio.totalTqqqUnits.toFixed(4);
+      $("avgPriceText").textContent = "$" + portfolio.avgTqqqPrice.toFixed(2);
+      $("marketValueText").textContent = fmt(portfolio.tqqqValueKRW) + "원";
+      $("profitLossText").textContent = (portfolio.tqqqProfitKRW >= 0 ? "+" : "") + fmt(portfolio.tqqqProfitKRW) + "원";
 
-      $("updatedAtText").textContent = updatedAt
-        ? "자동 반영: " + new Date(updatedAt).toLocaleString("ko-KR")
-        : "자동 반영 대기중";
+      $("updatedAtText").textContent = updatedAt ? "자동 반영: " + new Date(updatedAt).toLocaleString("ko-KR") : "자동 반영 대기중";
 
       $("actionMain").textContent = stage.action;
       $("actionNote").textContent = stage.note;
@@ -889,36 +488,36 @@
 
       $("toggleAutoRefreshBtn").textContent = "10분 자동갱신 " + (autoRefreshOn ? "ON" : "OFF");
 
-      renderLogs(logs);
+      renderLogs(logs, tqqqPrice, usdkrw);
       renderChart(history);
+      renderCompare(portfolio.totalAmountKRW, portfolio.tqqqValueKRW, portfolio.qqqValueKRW);
       handleAutoRefresh(autoRefreshOn);
     }
 
-    function renderLogs(logs){
+    function renderLogs(logs, currentTqqqPrice, currentFx){
       const tbody = $("logTableBody");
       tbody.innerHTML = "";
 
       if (!logs.length){
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" class="muted" style="padding:20px;">기록이 아직 없습니다.</td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="7" class="muted" style="padding:20px;">기록이 아직 없습니다.</td></tr>`;
         return;
       }
 
       logs.forEach((log, idx) => {
         const amount = Number(log.amount || 0);
-        const price = Number(log.tqqqPrice || 0);
-        const units = price > 0 ? amount / price : 0;
+        const tqqqPrice = Number(log.tqqqPrice || 0);
+        const fx = Number(log.fx || 0);
+        const units = (tqqqPrice > 0 && fx > 0) ? amount / (tqqqPrice * fx) : 0;
+        const tradeReturn = (tqqqPrice > 0) ? (((currentTqqqPrice - tqqqPrice) / tqqqPrice) * 100) : 0;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${log.date || "-"}</td>
           <td>${log.type || "-"}</td>
           <td>${fmt(amount)}원</td>
-          <td>$${price.toFixed(2)}</td>
+          <td>$${tqqqPrice.toFixed(2)}</td>
           <td>${units.toFixed(4)}</td>
+          <td>${tradeReturn.toFixed(1)}%</td>
           <td class="right"><button class="danger-btn" onclick="deleteLog(${idx})">삭제</button></td>
         `;
         tbody.appendChild(tr);
@@ -947,19 +546,23 @@
       const type = typeOverride || $("logType").value;
       const amount = Number(amountOverride || $("logAmount").value || 0);
       const memo = memoOverride || $("logMemo").value || "-";
-      const tqqqPrice = Number($("logTqqqPrice").value || settings.estimatedTqqqPrice || 0);
+      const tqqqPrice = Number($("logTqqqPrice").value || settings.tqqqPrice || 0);
+      const qqqPrice = Number($("logQqqPrice").value || settings.currentPrice || 0);
+      const fx = Number($("logFx").value || settings.usdkrw || 0);
 
-      if (!amount){
+      if (!amount) {
         alert("금액을 입력해줘");
         return;
       }
 
-      settings.logs.unshift({ date, type, amount, memo, tqqqPrice });
+      settings.logs.unshift({ date, type, amount, memo, tqqqPrice, qqqPrice, fx });
       saveSettings(settings);
 
       $("logAmount").value = "";
       $("logMemo").value = "";
       $("logTqqqPrice").value = "";
+      $("logQqqPrice").value = "";
+      $("logFx").value = "";
       render();
     }
 
@@ -1001,16 +604,14 @@
     }
 
     function handleAutoRefresh(on){
-      if (autoRefreshTimer){
+      if (autoRefreshTimer) {
         clearInterval(autoRefreshTimer);
         autoRefreshTimer = null;
       }
-      if (on){
+      if (on) {
         autoRefreshTimer = setInterval(fetchPrices, 10 * 60 * 1000);
       }
     }
-
-    window.deleteLog = deleteLog;
 
     $("saveSettingsBtn").addEventListener("click", saveFormSettings);
     $("addLogBtn").addEventListener("click", () => addLog());
@@ -1018,11 +619,12 @@
     $("clearLogBtn").addEventListener("click", clearLogs);
     $("refreshPriceBtn").addEventListener("click", fetchPrices);
     $("toggleAutoRefreshBtn").addEventListener("click", toggleAutoRefresh);
+    $("logDate").addEventListener("change", (e) => autoFillTradePrices(e.target.value));
+
+    window.deleteLog = deleteLog;
 
     (function init(){
-      if (!localStorage.getItem("mddTrackerSettings")){
-        saveSettings(defaults);
-      }
+      if (!localStorage.getItem("mddTrackerSettings")) saveSettings(defaults);
       $("logDate").value = new Date().toISOString().slice(0,10);
       render();
       fetchPrices();
