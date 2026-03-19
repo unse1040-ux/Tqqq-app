@@ -10,46 +10,71 @@
       --blue:#2563eb; --green:#059669; --amber:#b45309; --red:#dc2626; --navy:#0f172a;
       --shadow:0 10px 28px rgba(15,23,42,.08); --radius:20px;
     }
-    *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0;background:var(--bg);color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif
+    }
     .wrap{max-width:1150px;margin:0 auto;padding:14px;padding-bottom:40px}
     .hero,.card,.action-box{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
     .hero{border-radius:24px;padding:18px}
     .hero h1{margin:0 0 6px;font-size:24px;line-height:1.3}
     .hero p{margin:0;color:var(--sub);font-size:13px;line-height:1.55}
     .top-actions{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .grid{display:grid;gap:12px}.grid-4{grid-template-columns:repeat(4,1fr)}.grid-main{grid-template-columns:1fr 1.35fr;margin-top:12px}
-    .card{border-radius:20px;padding:16px}.card h3{margin:0 0 10px;font-size:15px}
+    .grid{display:grid;gap:12px}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .grid-main{grid-template-columns:1fr 1.35fr;margin-top:12px}
+    .card{border-radius:20px;padding:16px}
+    .card h3{margin:0 0 10px;font-size:15px}
     .action-box{border-radius:22px;padding:18px;margin-top:12px}
     .action-title{font-size:12px;font-weight:700;color:var(--sub)}
     .action-main{margin-top:6px;font-size:20px;font-weight:800;line-height:1.35}
     .action-note{margin-top:6px;font-size:13px;color:var(--sub)}
     .mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
     .mini-card{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:12px}
-    .mini-card .k{font-size:12px;color:var(--sub)} .mini-card .v{margin-top:4px;font-size:18px;font-weight:800;line-height:1.2;word-break:break-all}
+    .mini-card .k{font-size:12px;color:var(--sub)}
+    .mini-card .v{margin-top:4px;font-size:18px;font-weight:800;line-height:1.2;word-break:break-all}
     .label{font-size:12px;color:var(--sub);margin-bottom:6px}
-    .value-xl{font-size:24px;font-weight:800;line-height:1.15}.value-lg{font-size:18px;font-weight:700;line-height:1.2}
+    .value-xl{font-size:24px;font-weight:800;line-height:1.15}
+    .value-lg{font-size:18px;font-weight:700;line-height:1.2}
     .muted{color:var(--sub);font-size:12px;line-height:1.5}
     .badge{display:inline-flex;align-items:center;justify-content:center;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
-    .badge-green{background:#ecfdf5;color:#059669}.badge-blue{background:#eff6ff;color:#2563eb}.badge-amber{background:#fffbeb;color:#b45309}.badge-red{background:#fef2f2;color:#dc2626}
+    .badge-green{background:#ecfdf5;color:#059669}
+    .badge-blue{background:#eff6ff;color:#2563eb}
+    .badge-amber{background:#fffbeb;color:#b45309}
+    .badge-red{background:#fef2f2;color:#dc2626}
     .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .progress-wrap{margin-top:12px}.progress{height:12px;width:100%;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar{height:100%;width:0%;background:linear-gradient(90deg,#60a5fa 0%,#f59e0b 55%,#ef4444 100%);min-width:8px}
+    .progress-wrap{margin-top:12px}
+    .progress{height:12px;width:100%;background:#e5e7eb;border-radius:999px;overflow:hidden}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,#60a5fa 0%,#f59e0b 55%,#ef4444 100%);min-width:8px}
     .field{margin-bottom:12px}
-    input,select,button,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;background:#fff;font-family:inherit;min-height:48px}
+    input,select,button,textarea{
+      width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+      font-size:16px;background:#fff;font-family:inherit;min-height:48px
+    }
     textarea{min-height:96px;resize:vertical}
     button{cursor:pointer;font-weight:700;border:none;background:var(--navy);color:#fff}
-    button.secondary{background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe} button.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-    .sim-box{margin-top:12px;border-radius:16px;padding:14px}.sim-green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}.sim-blue{background:#eff6ff;color:#1e3a8a;border:1px solid #bfdbfe}
+    button.secondary{background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe}
+    button.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .sim-box{margin-top:12px;border-radius:16px;padding:14px}
+    .sim-green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .sim-blue{background:#eff6ff;color:#1e3a8a;border:1px solid #bfdbfe}
     .sim-box .big{font-size:24px;font-weight:800;margin-top:6px;line-height:1.2;word-break:break-all}
-    .chart-box{margin-top:10px;padding:8px 0 2px}.chart{display:flex;align-items:flex-end;gap:5px;height:72px;padding:0 2px}.chart-bar{flex:1;background:linear-gradient(180deg,#93c5fd 0%,#2563eb 100%);border-radius:8px 8px 0 0;min-width:8px}
+    .chart-box{margin-top:10px;padding:8px 0 2px}
+    .chart{display:flex;align-items:flex-end;gap:5px;height:72px;padding:0 2px}
+    .chart-bar{flex:1;background:linear-gradient(180deg,#93c5fd 0%,#2563eb 100%);border-radius:8px 8px 0 0;min-width:8px}
     .chart-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--sub);padding:0 2px}
     .compare-wrap{margin-top:12px}
     .compare-row{margin-bottom:10px}
     .compare-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
     .compare-bar-bg{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
     .compare-bar{height:100%;border-radius:999px}
-    .bar-invested{background:#94a3b8}.bar-tqqq{background:#2563eb}.bar-qqq{background:#10b981}
+    .bar-invested{background:#94a3b8}
+    .bar-tqqq{background:#2563eb}
+    .bar-qqq{background:#10b981}
     .log-table{width:100%;border-collapse:collapse;border-radius:18px;overflow:hidden}
     .log-table th,.log-table td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:top}
     .log-table th{color:var(--sub);background:#f8fafc;font-size:12px;position:sticky;top:0;z-index:1}
@@ -57,7 +82,11 @@
     .right{text-align:right}
     @media (max-width:900px){
       .grid-4,.grid-main,.two,.three,.top-actions{grid-template-columns:1fr}
-      .wrap{padding:12px}.hero h1{font-size:22px}.value-xl{font-size:22px}.value-lg{font-size:18px}.action-main{font-size:18px}
+      .wrap{padding:12px}
+      .hero h1{font-size:22px}
+      .value-xl{font-size:22px}
+      .value-lg{font-size:18px}
+      .action-main{font-size:18px}
       .log-table{display:block;overflow-x:auto;white-space:nowrap}
     }
   </style>
@@ -79,7 +108,7 @@
       <div id="actionNote" class="action-note">평시 구간</div>
       <div class="mini">
         <div class="mini-card"><div class="k">현재 MDD</div><div class="v" id="mddBig">0.0%</div></div>
-        <div class="mini-card"><div class="k">이번 주 권장 매수</div><div class="v" id="suggestedBuyBig">40,000원</div></div>
+        <div class="mini-card"><div class="k">오늘 권장 매수</div><div class="v" id="suggestedBuyBig">40,000원</div></div>
       </div>
     </div>
 
@@ -115,8 +144,8 @@
 
       <div class="card">
         <h3>자동매수 기준</h3>
-        <div id="weeklyAutoBuyText" class="value-xl">280,000원</div>
-        <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 1,213,333원</div>
+        <div id="weeklyAutoBuyText" class="value-xl">200,000원</div>
+        <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 866,667원</div>
         <div class="muted" style="margin-top:14px; line-height:1.7;">
           기본 4만원<br>-20% 6만원<br>-30% 8만원<br>-40% 10만원
         </div>
@@ -151,7 +180,8 @@
           <div class="sim-box sim-blue">
             <div class="label" style="color:#1e3a8a;">목표금액 달성률</div>
             <div id="targetProgressText" class="big">0.0%</div>
-            <div class="muted" style="margin-top:6px;color:#1e3a8a;">현재 TQQQ 평가금액 ÷ 목표금액</div>
+            <div id="targetProgressSubText" class="muted" style="margin-top:6px;color:#1e3a8a;">현재 TQQQ 평가금액 ÷ 목표금액</div>
+            <div id="targetEtaText" class="muted" style="margin-top:4px;color:#1e3a8a;">현재 속도 기준 계산 중</div>
           </div>
         </div>
 
@@ -211,14 +241,8 @@
           </div>
 
           <div class="two">
-            <div class="field">
-              <div class="label">TQQQ 체결가 (비우면 날짜 기준 자동입력)</div>
-              <input id="logTqqqPrice" type="number" step="0.01">
-            </div>
-            <div class="field">
-              <div class="label">QQQ 비교가 (비우면 날짜 기준 자동입력)</div>
-              <input id="logQqqPrice" type="number" step="0.01">
-            </div>
+            <div class="field"><div class="label">TQQQ 체결가 (비우면 날짜 기준 자동입력)</div><input id="logTqqqPrice" type="number" step="0.01"></div>
+            <div class="field"><div class="label">QQQ 비교가 (비우면 날짜 기준 자동입력)</div><input id="logQqqPrice" type="number" step="0.01"></div>
           </div>
 
           <div class="field"><div class="label">환율 (비우면 날짜 기준 자동입력)</div><input id="logFx" type="number" step="0.01"></div>
@@ -275,8 +299,15 @@
     let autoRefreshTimer = null;
 
     function fmt(n){ return new Intl.NumberFormat("ko-KR").format(Math.round(Number(n) || 0)); }
-    function getSettings(){ const saved = localStorage.getItem("mddTrackerSettings"); return saved ? JSON.parse(saved) : defaults; }
-    function saveSettings(data){ localStorage.setItem("mddTrackerSettings", JSON.stringify(data)); }
+
+    function getSettings(){
+      const saved = localStorage.getItem("mddTrackerSettings");
+      return saved ? JSON.parse(saved) : { ...defaults };
+    }
+
+    function saveSettings(data){
+      localStorage.setItem("mddTrackerSettings", JSON.stringify(data));
+    }
 
     function getStage(mdd){
       if (mdd <= -40) return { badge:"-40% 핵심 구간", badgeClass:"badge-red", action:"지금 강한 추가매수 검토", note:"핵심 이벤트 구간. 강하게 대응할지 검토" };
@@ -299,38 +330,74 @@
       return monthly * (((1 + r) ** n - 1) / r);
     }
 
+    function estimateYearsToTarget(monthly, annualRate, currentValue, targetValue){
+      if (targetValue <= currentValue) return 0;
+      const monthlyRate = annualRate / 12;
+      let value = currentValue;
+      let months = 0;
+      const maxMonths = 100 * 12;
+
+      while (value < targetValue && months < maxMonths) {
+        value = value * (1 + monthlyRate) + monthly;
+        months++;
+      }
+
+      if (months >= maxMonths) return null;
+      return months / 12;
+    }
+
     async function fetchPrices(){
+      const settings = getSettings();
+
       try {
         $("updatedAtText").textContent = "가격 불러오는 중...";
 
-        const [qqqRes, tqqqRes, fxRes] = await Promise.all([
-          fetch("/api/qqq"),
-          fetch("/api/tqqq"),
-          fetch("/api/usdkrw")
-        ]);
-
+        const qqqRes = await fetch("/api/qqq");
         const qqqData = await qqqRes.json();
-        const tqqqData = await tqqqRes.json();
-        const fxData = await fxRes.json();
 
-        if (!qqqRes.ok || qqqData.error) throw new Error(qqqData.error || "QQQ 가격 조회 실패");
-        if (!tqqqRes.ok || tqqqData.error) throw new Error(tqqqData.error || "TQQQ 가격 조회 실패");
-        if (!fxRes.ok || fxData.error) throw new Error(fxData.error || "환율 조회 실패");
+        if (qqqRes.ok && !qqqData.error) {
+          settings.currentPrice = Number(qqqData.currentPrice || 0);
+          settings.peakPrice = Number(qqqData.peakPrice || 0);
+          settings.updatedAt = qqqData.updatedAt || new Date().toISOString();
 
-        const settings = getSettings();
-        settings.currentPrice = Number(qqqData.currentPrice || 0);
-        settings.peakPrice = Number(qqqData.peakPrice || 0);
-        settings.tqqqPrice = Number(tqqqData.currentPrice || 0);
-        settings.usdkrw = Number(fxData.currentPrice || 0);
-        settings.updatedAt = qqqData.updatedAt || new Date().toISOString();
+          const mdd = settings.peakPrice
+            ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100
+            : 0;
 
-        const mdd = settings.peakPrice ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100 : 0;
-        settings.history = settings.history || [];
-        settings.history.push({ date: settings.updatedAt, mdd: Number(mdd.toFixed(2)) });
-        settings.history = settings.history.slice(-20);
+          settings.history = settings.history || [];
+          settings.history.push({
+            date: settings.updatedAt,
+            mdd: Number(mdd.toFixed(2))
+          });
+          settings.history = settings.history.slice(-20);
+        }
+
+        try {
+          const tqqqRes = await fetch("/api/tqqq");
+          const tqqqData = await tqqqRes.json();
+          if (tqqqRes.ok && !tqqqData.error) {
+            settings.tqqqPrice = Number(tqqqData.currentPrice || 0);
+          }
+        } catch (e) {
+          console.error("TQQQ fetch failed", e);
+        }
+
+        try {
+          const fxRes = await fetch("/api/usdkrw");
+          const fxData = await fxRes.json();
+          if (fxRes.ok && !fxData.error) {
+            settings.usdkrw = Number(fxData.currentPrice || 0);
+          }
+        } catch (e) {
+          console.error("FX fetch failed", e);
+        }
 
         saveSettings(settings);
         render();
+
+        $("updatedAtText").textContent = settings.updatedAt
+          ? "자동 반영: " + new Date(settings.updatedAt).toLocaleString("ko-KR")
+          : "자동 반영 완료";
       } catch (e) {
         $("updatedAtText").textContent = "가격 자동반영 실패";
         console.error(e);
@@ -361,8 +428,13 @@
     function renderChart(history){
       const chart = $("mddChart");
       chart.innerHTML = "";
-      const data = history && history.length ? history : [{mdd:-6.6},{mdd:-5.8},{mdd:-7.2},{mdd:-6.4},{mdd:-6.6}];
+
+      const data = history && history.length ? history : [
+        {mdd:-6.6},{mdd:-5.8},{mdd:-7.2},{mdd:-6.4},{mdd:-6.6}
+      ];
+
       const maxAbs = Math.max(...data.map(x => Math.abs(Number(x.mdd || 0))), 1);
+
       data.forEach(item => {
         const v = Math.abs(Number(item.mdd || 0));
         const h = Math.max(8, Math.round((v / maxAbs) * 70));
@@ -383,18 +455,31 @@
         const amountKRW = Number(log.amount || 0);
         const tqqqPrice = Number(log.tqqqPrice || 0);
         const qqqPrice = Number(log.qqqPrice || 0);
-        const fx = Number(log.fx || 0);
+        const fx = Number(log.fx || currentFx || 0);
 
-        if (amountKRW > 0 && fx > 0) {
-          if (tqqqPrice > 0) totalTqqqUnits += amountKRW / (tqqqPrice * fx);
-          if (qqqPrice > 0) totalQqqUnits += amountKRW / (qqqPrice * fx);
+        if (amountKRW > 0) {
+          if (tqqqPrice > 0 && fx > 0) {
+            totalTqqqUnits += amountKRW / (tqqqPrice * fx);
+          }
+          if (qqqPrice > 0 && fx > 0) {
+            totalQqqUnits += amountKRW / (qqqPrice * fx);
+          }
           totalAmountKRW += amountKRW;
         }
       });
 
-      const avgTqqqPrice = totalTqqqUnits > 0 ? (totalAmountKRW / currentFx) / totalTqqqUnits : 0;
-      const tqqqValueKRW = totalTqqqUnits * currentTqqqPrice * currentFx;
-      const qqqValueKRW = totalQqqUnits * currentQqqPrice * currentFx;
+      const avgTqqqPrice = (totalTqqqUnits > 0 && currentFx > 0)
+        ? (totalAmountKRW / currentFx) / totalTqqqUnits
+        : 0;
+
+      const tqqqValueKRW = (totalTqqqUnits > 0 && currentTqqqPrice > 0 && currentFx > 0)
+        ? totalTqqqUnits * currentTqqqPrice * currentFx
+        : 0;
+
+      const qqqValueKRW = (totalQqqUnits > 0 && currentQqqPrice > 0 && currentFx > 0)
+        ? totalQqqUnits * currentQqqPrice * currentFx
+        : 0;
+
       const tqqqProfitKRW = tqqqValueKRW - totalAmountKRW;
 
       return {
@@ -410,6 +495,7 @@
 
     function renderCompare(totalInvested, tqqqValue, qqqValue){
       const maxVal = Math.max(totalInvested, tqqqValue, qqqValue, 1);
+
       $("investedCompareText").textContent = fmt(totalInvested) + "원";
       $("tqqqCompareText").textContent = fmt(tqqqValue) + "원";
       $("qqqCompareText").textContent = fmt(qqqValue) + "원";
@@ -419,6 +505,38 @@
       $("qqqBar").style.width = (qqqValue / maxVal * 100) + "%";
     }
 
+    function renderLogs(logs, currentTqqqPrice, currentFx){
+      const tbody = $("logTableBody");
+      tbody.innerHTML = "";
+
+      if (!logs.length){
+        tbody.innerHTML = `<tr><td colspan="7" class="muted" style="padding:20px;">기록이 아직 없습니다.</td></tr>`;
+        return;
+      }
+
+      logs.forEach((log, idx) => {
+        const amount = Number(log.amount || 0);
+        const tqqqPrice = Number(log.tqqqPrice || 0);
+        const fx = Number(log.fx || currentFx || 0);
+        const units = (tqqqPrice > 0 && fx > 0) ? amount / (tqqqPrice * fx) : 0;
+        const tradeReturn = (tqqqPrice > 0 && currentTqqqPrice > 0)
+          ? (((currentTqqqPrice - tqqqPrice) / tqqqPrice) * 100)
+          : 0;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${log.date || "-"}</td>
+          <td>${log.type || "-"}</td>
+          <td>${fmt(amount)}원</td>
+          <td>$${tqqqPrice.toFixed(2)}</td>
+          <td>${units.toFixed(4)}</td>
+          <td>${tradeReturn.toFixed(1)}%</td>
+          <td class="right"><button class="danger-btn" onclick="deleteLog(${idx})">삭제</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     function render(){
       const settings = getSettings();
 
@@ -426,8 +544,8 @@
       const currentPrice = Number(settings.currentPrice) || 0;
       const tqqqPrice = Number(settings.tqqqPrice) || 0;
       const usdkrw = Number(settings.usdkrw) || 0;
-      const annualRate = Number(settings.annualRate) || 0;
-      const years = Number(settings.years) || 0;
+      const annualRate = Number(settings.annualRate ?? 0.15);
+      const years = Number(settings.years ?? 20);
       const logs = settings.logs || [];
       const updatedAt = settings.updatedAt || "";
       const history = settings.history || [];
@@ -444,41 +562,17 @@
 
       const portfolio = calcPortfolio(logs, tqqqPrice, currentPrice, usdkrw);
       const targetAmount = Number(settings.targetAmount || 0);
-const targetProgress = targetAmount > 0 ? (portfolio.tqqqValueKRW / targetAmount) * 100 : 0;
-const remaining = Math.max(0, targetAmount - portfolio.tqqqValueKRW);
+      const targetProgress = targetAmount > 0 ? (portfolio.tqqqValueKRW / targetAmount) * 100 : 0;
+      const remaining = Math.max(0, targetAmount - portfolio.tqqqValueKRW);
 
-let progressDisplay;
-if (targetProgress < 1) {
-  progressDisplay = targetProgress.toFixed(3);
-} else {
-  progressDisplay = targetProgress.toFixed(1);
-}
-
-$("targetProgressText").textContent = progressDisplay + "%";
-$("targetProgressSubText").textContent = "목표까지 " + fmt(remaining) + "원 남음";
-
-const etaYears = estimateYearsToTarget(
-  monthlyApprox,
-  annualRate,
-  portfolio.tqqqValueKRW,
-  targetAmount
-);
-
-if (targetAmount <= portfolio.tqqqValueKRW) {
-  $("targetEtaText").textContent = "이미 목표금액 도달";
-} else if (etaYears === null) {
-  $("targetEtaText").textContent = "현재 조건으로는 장기 추정 불가";
-} else {
-  $("targetEtaText").textContent = "현재 속도 기준 약 " + etaYears.toFixed(1) + "년 후 도달 예상";
-}
-      $("baseBuy").value = settings.baseBuy;
-      $("buy20").value = settings.buy20;
-      $("buy30").value = settings.buy30;
-      $("buy40").value = settings.buy40;
-      $("cashReserve").value = settings.cashReserve;
-      $("annualRate").value = settings.annualRate;
-      $("years").value = settings.years;
-      $("targetAmount").value = settings.targetAmount;
+      $("baseBuy").value = settings.baseBuy ?? 40000;
+      $("buy20").value = settings.buy20 ?? 60000;
+      $("buy30").value = settings.buy30 ?? 80000;
+      $("buy40").value = settings.buy40 ?? 100000;
+      $("cashReserve").value = settings.cashReserve ?? 3000000;
+      $("annualRate").value = annualRate;
+      $("years").value = years;
+      $("targetAmount").value = settings.targetAmount ?? 1000000000;
 
       $("mddText").textContent = mdd.toFixed(1) + "%";
       $("mddBig").textContent = mdd.toFixed(1) + "%";
@@ -492,7 +586,19 @@ if (targetAmount <= portfolio.tqqqValueKRW) {
       $("monthlyApproxText").textContent = "월 환산 약 " + fmt(monthlyApprox) + "원";
       $("suggestedBuyBig").textContent = fmt(suggestedBuy) + "원";
       $("projectedValueText").textContent = fmt(projectedValue) + "원";
-      $("targetProgressText").textContent = targetProgress.toFixed(1) + "%";
+
+      let progressDisplay = targetProgress < 1 ? targetProgress.toFixed(3) : targetProgress.toFixed(1);
+      $("targetProgressText").textContent = progressDisplay + "%";
+      $("targetProgressSubText").textContent = "목표까지 " + fmt(remaining) + "원 남음";
+
+      const etaYears = estimateYearsToTarget(monthlyApprox, annualRate, portfolio.tqqqValueKRW, targetAmount);
+      if (targetAmount <= portfolio.tqqqValueKRW) {
+        $("targetEtaText").textContent = "이미 목표금액 도달";
+      } else if (etaYears === null) {
+        $("targetEtaText").textContent = "현재 조건으로는 장기 추정 불가";
+      } else {
+        $("targetEtaText").textContent = "현재 속도 기준 약 " + etaYears.toFixed(1) + "년 후 도달 예상";
+      }
 
       $("totalUnitsText").textContent = portfolio.totalTqqqUnits.toFixed(4);
       $("avgPriceText").textContent = "$" + portfolio.avgTqqqPrice.toFixed(2);
@@ -519,46 +625,16 @@ if (targetAmount <= portfolio.tqqqValueKRW) {
       handleAutoRefresh(autoRefreshOn);
     }
 
-    function renderLogs(logs, currentTqqqPrice, currentFx){
-      const tbody = $("logTableBody");
-      tbody.innerHTML = "";
-
-      if (!logs.length){
-        tbody.innerHTML = `<tr><td colspan="7" class="muted" style="padding:20px;">기록이 아직 없습니다.</td></tr>`;
-        return;
-      }
-
-      logs.forEach((log, idx) => {
-        const amount = Number(log.amount || 0);
-        const tqqqPrice = Number(log.tqqqPrice || 0);
-        const fx = Number(log.fx || 0);
-        const units = (tqqqPrice > 0 && fx > 0) ? amount / (tqqqPrice * fx) : 0;
-        const tradeReturn = (tqqqPrice > 0) ? (((currentTqqqPrice - tqqqPrice) / tqqqPrice) * 100) : 0;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${log.date || "-"}</td>
-          <td>${log.type || "-"}</td>
-          <td>${fmt(amount)}원</td>
-          <td>$${tqqqPrice.toFixed(2)}</td>
-          <td>${units.toFixed(4)}</td>
-          <td>${tradeReturn.toFixed(1)}%</td>
-          <td class="right"><button class="danger-btn" onclick="deleteLog(${idx})">삭제</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
     function saveFormSettings(){
       const settings = getSettings();
-      settings.baseBuy = Number($("baseBuy").value || 0);
-      settings.buy20 = Number($("buy20").value || 0);
-      settings.buy30 = Number($("buy30").value || 0);
-      settings.buy40 = Number($("buy40").value || 0);
-      settings.cashReserve = Number($("cashReserve").value || 0);
-      settings.annualRate = Number($("annualRate").value || 0);
-      settings.years = Number($("years").value || 0);
-      settings.targetAmount = Number($("targetAmount").value || 0);
+      settings.baseBuy = Number($("baseBuy").value || 40000);
+      settings.buy20 = Number($("buy20").value || 60000);
+      settings.buy30 = Number($("buy30").value || 80000);
+      settings.buy40 = Number($("buy40").value || 100000);
+      settings.cashReserve = Number($("cashReserve").value || 3000000);
+      settings.annualRate = Number($("annualRate").value || 0.15);
+      settings.years = Number($("years").value || 20);
+      settings.targetAmount = Number($("targetAmount").value || 1000000000);
       saveSettings(settings);
       render();
       alert("설정 저장 완료");
@@ -649,7 +725,9 @@ if (targetAmount <= portfolio.tqqqValueKRW) {
     window.deleteLog = deleteLog;
 
     (function init(){
-      if (!localStorage.getItem("mddTrackerSettings")) saveSettings(defaults);
+      if (!localStorage.getItem("mddTrackerSettings")) {
+        saveSettings(defaults);
+      }
       $("logDate").value = new Date().toISOString().slice(0,10);
       render();
       fetchPrices();
