@@ -729,46 +729,50 @@
     }
 
     async function fetchPrices(){
-      try {
-        $("updatedAtText").textContent = "가격 불러오는 중...";
-        const res = await fetch("/api/qqq");
-        const data = await res.json();
+  try {
+    $("updatedAtText").textContent = "가격 불러오는 중...";
 
-        if (!res.ok || data.error) {
-          throw new Error(data.error || "가격 조회 실패");
-        }
+    const [qqqRes, tqqqRes] = await Promise.all([
+      fetch("/api/qqq"),
+      fetch("/api/tqqq")
+    ]);
 
-        const settings = getSettings();
-        settings.currentPrice = Number(data.currentPrice || 0);
-        settings.peakPrice = Number(data.peakPrice || 0);
+    const qqqData = await qqqRes.json();
+    const tqqqData = await tqqqRes.json();
 
-        // 단순 추정: TQQQ 가격은 최근 비율로 대략 QQQ의 1/6.5 정도라고 고정하지 않고
-        // 현재 QQQ 현재가 기준 임시 추정값 사용
-        if (!settings.estimatedTqqqPrice) {
-          settings.estimatedTqqqPrice = Number((settings.currentPrice / 6.5).toFixed(2));
-        }
-
-        settings.updatedAt = data.updatedAt || new Date().toISOString();
-
-        const mdd = settings.peakPrice
-          ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100
-          : 0;
-
-        settings.history = settings.history || [];
-        settings.history.push({
-          date: settings.updatedAt,
-          mdd: Number(mdd.toFixed(2))
-        });
-        settings.history = settings.history.slice(-20);
-
-        saveSettings(settings);
-        render();
-      } catch (e) {
-        $("updatedAtText").textContent = "가격 자동반영 실패";
-        console.error(e);
-      }
+    if (!qqqRes.ok || qqqData.error) {
+      throw new Error(qqqData.error || "QQQ 가격 조회 실패");
     }
 
+    if (!tqqqRes.ok || tqqqData.error) {
+      throw new Error(tqqqData.error || "TQQQ 가격 조회 실패");
+    }
+
+    const settings = getSettings();
+    settings.currentPrice = Number(qqqData.currentPrice || 0);
+    settings.peakPrice = Number(qqqData.peakPrice || 0);
+    settings.estimatedTqqqPrice = Number(tqqqData.currentPrice || 0);
+    settings.updatedAt = qqqData.updatedAt || new Date().toISOString();
+
+    const mdd = settings.peakPrice
+      ? ((settings.currentPrice - settings.peakPrice) / settings.peakPrice) * 100
+      : 0;
+
+    settings.history = settings.history || [];
+    settings.history.push({
+      date: settings.updatedAt,
+      mdd: Number(mdd.toFixed(2))
+    });
+    settings.history = settings.history.slice(-20);
+
+    saveSettings(settings);
+    render();
+  } catch (e) {
+    $("updatedAtText").textContent = "가격 자동반영 실패";
+    console.error(e);
+  }
+}
+    
     function renderChart(history){
       const chart = $("mddChart");
       chart.innerHTML = "";
