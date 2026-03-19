@@ -20,57 +20,62 @@
       --red:#dc2626;
       --red-bg:#fef2f2;
       --navy:#0f172a;
-      --shadow:0 8px 24px rgba(15,23,42,0.08);
+      --shadow:0 10px 28px rgba(15,23,42,0.08);
       --radius:20px;
     }
 
     * { box-sizing:border-box; }
+    html { -webkit-text-size-adjust: 100%; }
 
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
       background:var(--bg);
       color:var(--text);
+      line-height:1.45;
     }
 
     .wrap{
       max-width:1100px;
       margin:0 auto;
-      padding:18px;
+      padding:14px;
+      padding-bottom:40px;
     }
 
     .hero{
       background:linear-gradient(135deg,#ffffff 0%, #eef4ff 100%);
       border:1px solid var(--line);
-      border-radius:28px;
-      padding:22px;
+      border-radius:24px;
+      padding:18px;
       box-shadow:var(--shadow);
-      margin-bottom:18px;
+      margin-bottom:14px;
     }
 
     .hero h1{
-      margin:0 0 8px 0;
-      font-size:28px;
-      line-height:1.25;
+      margin:0 0 6px 0;
+      font-size:24px;
+      line-height:1.3;
+      word-break:keep-all;
     }
 
     .hero p{
       margin:0;
       color:var(--sub);
       line-height:1.55;
-      font-size:14px;
+      font-size:13px;
+      word-break:keep-all;
     }
 
     .top-actions{
-      margin-top:16px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
     }
 
     .grid{
       display:grid;
-      gap:16px;
+      gap:12px;
     }
 
     .grid-4{
@@ -78,21 +83,23 @@
     }
 
     .grid-main{
-      grid-template-columns:1.02fr 1.35fr;
-      margin-top:16px;
+      grid-template-columns:1fr 1.35fr;
+      margin-top:12px;
     }
 
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:18px;
+      border-radius:20px;
+      padding:16px;
       box-shadow:var(--shadow);
     }
 
     .card h3{
-      margin:0 0 12px 0;
-      font-size:16px;
+      margin:0 0 10px 0;
+      font-size:15px;
+      line-height:1.35;
+      word-break:keep-all;
     }
 
     .label{
@@ -102,28 +109,33 @@
     }
 
     .value-xl{
-      font-size:30px;
+      font-size:24px;
       font-weight:800;
-      line-height:1.12;
+      line-height:1.15;
     }
 
     .value-lg{
-      font-size:22px;
+      font-size:18px;
       font-weight:700;
+      line-height:1.2;
     }
 
     .muted{
       color:var(--sub);
-      font-size:13px;
+      font-size:12px;
+      line-height:1.5;
     }
 
     .badge{
-      display:inline-block;
-      padding:8px 12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:7px 11px;
       border-radius:999px;
       font-size:12px;
       font-weight:700;
       border:1px solid transparent;
+      white-space:nowrap;
     }
 
     .badge-green{ background:var(--green-bg); color:var(--green); }
@@ -132,30 +144,31 @@
     .badge-red{ background:var(--red-bg); color:var(--red); }
 
     .action-box{
-      border-radius:24px;
-      padding:20px;
+      border-radius:22px;
+      padding:18px;
       box-shadow:var(--shadow);
       border:1px solid var(--line);
       background:#fff;
-      margin-top:16px;
+      margin-top:12px;
     }
 
     .action-title{
-      font-size:13px;
+      font-size:12px;
       font-weight:700;
       color:var(--sub);
     }
 
     .action-main{
-      margin-top:8px;
-      font-size:26px;
+      margin-top:6px;
+      font-size:20px;
       font-weight:800;
-      line-height:1.3;
+      line-height:1.35;
+      word-break:keep-all;
     }
 
     .action-note{
-      margin-top:8px;
-      font-size:14px;
+      margin-top:6px;
+      font-size:13px;
       color:var(--sub);
     }
 
@@ -163,11 +176,11 @@
       display:flex;
       gap:8px;
       flex-wrap:wrap;
-      margin-top:12px;
+      margin-top:10px;
     }
 
     .field{
-      margin-bottom:14px;
+      margin-bottom:12px;
     }
 
     input, select, button, textarea{
@@ -175,9 +188,15 @@
       border:1px solid var(--line);
       border-radius:14px;
       padding:12px 14px;
-      font-size:14px;
+      font-size:16px;
       background:#fff;
       font-family:inherit;
+      min-height:48px;
+    }
+
+    textarea{
+      min-height:96px;
+      resize:vertical;
     }
 
     button{
@@ -203,20 +222,20 @@
     .two{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:12px;
+      gap:10px;
     }
 
     .three{
       display:grid;
       grid-template-columns:1fr 1fr 1fr;
-      gap:12px;
+      gap:10px;
     }
 
     .mini{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
-      margin-top:14px;
+      margin-top:12px;
     }
 
     .mini-card{
@@ -233,20 +252,23 @@
 
     .mini-card .v{
       margin-top:4px;
-      font-size:20px;
+      font-size:18px;
       font-weight:800;
+      line-height:1.2;
+      word-break:break-all;
     }
 
     .progress-wrap{
-      margin-top:14px;
+      margin-top:12px;
     }
 
     .progress{
-      height:10px;
+      height:12px;
       width:100%;
       background:#e5e7eb;
       border-radius:999px;
       overflow:hidden;
+      position:relative;
     }
 
     .bar{
@@ -254,6 +276,7 @@
       width:0%;
       background:linear-gradient(90deg,#60a5fa 0%, #f59e0b 55%, #ef4444 100%);
       transition:width .25s ease;
+      min-width:8px;
     }
 
     .small-list{
@@ -261,48 +284,50 @@
       padding-left:18px;
       color:var(--sub);
       line-height:1.7;
-      font-size:14px;
+      font-size:13px;
     }
 
     .sim-box{
-      margin-top:14px;
+      margin-top:12px;
       background:#ecfdf5;
       color:#065f46;
       border:1px solid #a7f3d0;
-      border-radius:18px;
-      padding:16px;
+      border-radius:16px;
+      padding:14px;
     }
 
     .sim-box .big{
-      font-size:28px;
+      font-size:24px;
       font-weight:800;
       margin-top:6px;
+      line-height:1.2;
+      word-break:break-all;
     }
 
     .chart-box{
       margin-top:10px;
-      padding:10px 0 2px;
+      padding:8px 0 2px;
     }
 
     .chart{
       display:flex;
       align-items:flex-end;
-      gap:6px;
-      height:80px;
-      padding:0 4px;
+      gap:5px;
+      height:72px;
+      padding:0 2px;
     }
 
     .chart-bar{
       flex:1;
       background:linear-gradient(180deg,#93c5fd 0%, #2563eb 100%);
       border-radius:8px 8px 0 0;
-      min-width:10px;
+      min-width:8px;
     }
 
     .chart-labels{
       display:flex;
       justify-content:space-between;
-      margin-top:8px;
+      margin-top:6px;
       font-size:11px;
       color:var(--sub);
       padding:0 2px;
@@ -311,38 +336,41 @@
     .log-table{
       width:100%;
       border-collapse:collapse;
-      overflow:hidden;
       border-radius:18px;
+      overflow:hidden;
     }
 
     .log-table th,
     .log-table td{
-      padding:12px 10px;
+      padding:10px 8px;
       border-bottom:1px solid var(--line);
       text-align:left;
-      font-size:14px;
-      vertical-align:middle;
+      font-size:13px;
+      vertical-align:top;
     }
 
     .log-table th{
       color:var(--sub);
       background:#f8fafc;
       font-size:12px;
-      letter-spacing:0.2px;
+      letter-spacing:0.1px;
+      position:sticky;
+      top:0;
+      z-index:1;
     }
 
     .danger-btn{
       background:#fff;
       color:var(--red);
       border:1px solid #fecaca;
-      padding:8px 10px;
+      padding:7px 10px;
       border-radius:12px;
       width:auto;
+      min-height:auto;
+      font-size:12px;
     }
 
-    .right{
-      text-align:right;
-    }
+    .right{ text-align:right; }
 
     @media (max-width: 900px){
       .grid-4,
@@ -352,16 +380,20 @@
         grid-template-columns:1fr;
       }
 
-      .value-xl{
-        font-size:26px;
-      }
+      .wrap{ padding:12px; }
+      .hero{ padding:16px; border-radius:22px; }
+      .hero h1{ font-size:22px; }
+      .card{ padding:15px; }
+      .value-xl{ font-size:22px; }
+      .value-lg{ font-size:18px; }
+      .action-main{ font-size:18px; }
+      .mini{ grid-template-columns:1fr 1fr; }
+      .top-actions{ grid-template-columns:1fr; }
 
-      .action-main{
-        font-size:22px;
-      }
-
-      .hero h1{
-        font-size:24px;
+      .log-table{
+        display:block;
+        overflow-x:auto;
+        white-space:nowrap;
       }
 
       .log-table th:nth-child(4),
@@ -377,7 +409,7 @@
       <h1>QQQ MDD + 자동매수 대시보드</h1>
       <p>
         QQQ 가격 자동반영, 52주 고점 자동반영, MDD 자동계산, TQQQ 체감 하락률,
-        목표 자산 시뮬레이터, 매수일지까지 한 화면에서 보는 개인용 투자 앱.
+        목표 자산 시뮬레이터, 누적평단/평가금액까지 한 화면에서 보는 개인용 투자 앱.
       </p>
 
       <div class="top-actions">
@@ -398,7 +430,7 @@
         </div>
         <div class="mini-card">
           <div class="k">이번 주 권장 매수</div>
-          <div class="v" id="suggestedBuyBig">200,000원</div>
+          <div class="v" id="suggestedBuyBig">40,000원</div>
         </div>
       </div>
     </div>
@@ -433,67 +465,112 @@
         <div class="label" style="margin-top:14px;">직전 최고가 (52주 고점)</div>
         <div id="peakPriceText" class="value-lg">$0.00</div>
 
+        <div class="label" style="margin-top:14px;">예상 TQQQ 가격</div>
+        <div id="estimatedTqqqText" class="value-lg">$0.00</div>
+
         <div id="updatedAtText" class="muted" style="margin-top:14px;">자동 반영 대기중</div>
       </div>
 
       <div class="card">
         <h3>자동매수 기준</h3>
-        <div id="weeklyAutoBuyText" class="value-xl">200,000원</div>
-        <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 866,667원</div>
+        <div id="weeklyAutoBuyText" class="value-xl">280,000원</div>
+        <div id="monthlyApproxText" class="muted" style="margin-top:8px;">월 환산 약 1,213,333원</div>
         <div class="muted" style="margin-top:14px; line-height:1.7;">
-          평시 100%<br>
-          -20% 125%<br>
-          -30% 150%<br>
-          -40% 200%
+          기본 4만원<br>
+          -20% 6만원<br>
+          -30% 8만원<br>
+          -40% 10만원
         </div>
       </div>
     </div>
 
     <div class="grid grid-main">
-      <div class="card">
-        <h3>입력 / 설정</h3>
+      <div>
+        <div class="card">
+          <h3>입력 / 설정</h3>
 
-        <div class="field">
-          <div class="label">주간 자동매수 금액 (원)</div>
-          <input id="weeklyAutoBuy" type="number" step="1000" />
-        </div>
+          <div class="field">
+            <div class="label">기본 매수금액 (원)</div>
+            <input id="baseBuy" type="number" step="1000" />
+          </div>
 
-        <div class="field">
-          <div class="label">대기 현금 (원)</div>
-          <input id="cashReserve" type="number" step="1000" />
-        </div>
+          <div class="field">
+            <div class="label">-20% 이벤트 금액 (원)</div>
+            <input id="buy20" type="number" step="1000" />
+          </div>
 
-        <div class="field">
-          <div class="label">연 기대수익률 (예: 0.15 = 15%)</div>
-          <input id="annualRate" type="number" step="0.01" />
-        </div>
+          <div class="field">
+            <div class="label">-30% 이벤트 금액 (원)</div>
+            <input id="buy30" type="number" step="1000" />
+          </div>
 
-        <div class="field">
-          <div class="label">시뮬 기간 (년)</div>
-          <input id="years" type="number" step="1" />
-        </div>
+          <div class="field">
+            <div class="label">-40% 이벤트 금액 (원)</div>
+            <input id="buy40" type="number" step="1000" />
+          </div>
 
-        <div class="two">
-          <button id="saveSettingsBtn">설정 저장</button>
-          <button id="addSuggestedBtn" class="secondary">권장매수 일지 추가</button>
-        </div>
+          <div class="field">
+            <div class="label">대기 현금 (원)</div>
+            <input id="cashReserve" type="number" step="1000" />
+          </div>
 
-        <div class="sim-box">
-          <div class="label" style="color:#065f46;">예상 최종 자산</div>
-          <div id="projectedValueText" class="big">0원</div>
-          <div class="muted" style="margin-top:6px; color:#065f46;">
-            월 자동매수 기준 단순 복리 추정
+          <div class="field">
+            <div class="label">연 기대수익률 (예: 0.15 = 15%)</div>
+            <input id="annualRate" type="number" step="0.01" />
+          </div>
+
+          <div class="field">
+            <div class="label">시뮬 기간 (년)</div>
+            <input id="years" type="number" step="1" />
+          </div>
+
+          <div class="field">
+            <div class="label">목표 금액 (원)</div>
+            <input id="targetAmount" type="number" step="1000000" />
+          </div>
+
+          <div class="two">
+            <button id="saveSettingsBtn">설정 저장</button>
+            <button id="addSuggestedBtn" class="secondary">권장매수 일지 추가</button>
+          </div>
+
+          <div class="sim-box">
+            <div class="label" style="color:#065f46;">예상 최종 자산</div>
+            <div id="projectedValueText" class="big">0원</div>
+            <div class="muted" style="margin-top:6px; color:#065f46;">
+              월 자동매수 기준 단순 복리 추정
+            </div>
+          </div>
+
+          <div class="sim-box" style="margin-top:12px; background:#eff6ff; color:#1e3a8a; border-color:#bfdbfe;">
+            <div class="label" style="color:#1e3a8a;">목표금액 달성률</div>
+            <div id="targetProgressText" class="big">0.0%</div>
+            <div class="muted" style="margin-top:6px; color:#1e3a8a;">
+              현재 평가금액 ÷ 목표금액
+            </div>
           </div>
         </div>
 
-        <div class="card" style="margin-top:16px; padding:14px; box-shadow:none;">
-          <h3 style="margin-bottom:10px;">최종 룰</h3>
-          <ul class="small-list">
-            <li>기본은 주 20만원 자동매수</li>
-            <li>QQQ MDD -20 / -30 / -40 구간만 체크</li>
-            <li>평소에는 앱 안 보고 자동매수만 유지</li>
-            <li>목돈 생기고 크게 빠졌을 때만 이벤트 추가매수</li>
-          </ul>
+        <div class="card" style="margin-top:16px;">
+          <h3>보유 현황</h3>
+          <div class="mini">
+            <div class="mini-card">
+              <div class="k">누적 수량</div>
+              <div class="v" id="totalUnitsText">0.0000</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">누적 평단</div>
+              <div class="v" id="avgPriceText">$0.00</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">현재 평가금액</div>
+              <div class="v" id="marketValueText">0원</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">평가손익</div>
+              <div class="v" id="profitLossText">0원</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -524,12 +601,18 @@
               <select id="logType">
                 <option>기본 자동매수</option>
                 <option>이벤트 추가매수</option>
+                <option>기타 추가매수</option>
               </select>
             </div>
             <div class="field">
               <div class="label">금액</div>
               <input id="logAmount" type="number" step="1000" />
             </div>
+          </div>
+
+          <div class="field">
+            <div class="label">TQQQ 체결가 (비우면 자동으로 현재 예상가 사용)</div>
+            <input id="logTqqqPrice" type="number" step="0.01" />
           </div>
 
           <div class="field">
@@ -549,8 +632,9 @@
                   <th>날짜</th>
                   <th>구분</th>
                   <th>금액</th>
-                  <th>메모</th>
-                  <th class="right">삭제</th>
+                  <th>TQQQ가</th>
+                  <th>수량</th>
+                  <th>삭제</th>
                 </tr>
               </thead>
               <tbody id="logTableBody"></tbody>
@@ -565,19 +649,21 @@
     const $ = (id) => document.getElementById(id);
 
     const defaults = {
-      weeklyAutoBuy: 200000,
+      baseBuy: 40000,
+      buy20: 60000,
+      buy30: 80000,
+      buy40: 100000,
       cashReserve: 3000000,
       annualRate: 0.15,
       years: 20,
+      targetAmount: 1000000000,
       peakPrice: 0,
       currentPrice: 0,
+      estimatedTqqqPrice: 0,
       updatedAt: "",
       autoRefreshOn: true,
       history: [],
-      logs: [
-        { date: "2026-03-17", type: "기본 자동매수", amount: 200000, memo: "주간 자동이체" },
-        { date: "2026-03-18", type: "이벤트 추가매수", amount: 250000, memo: "QQQ -20% 알림 대응" }
-      ]
+      logs: []
     };
 
     let autoRefreshTimer = null;
@@ -596,24 +682,30 @@
     }
 
     function getStage(mdd){
-      if (mdd <= -40) return {
-        badge:"-40% 핵심 구간",
-        badgeClass:"badge-red",
-        action:"지금 강한 추가매수 검토",
-        note:"핵심 이벤트 구간. 강하게 대응할지 검토"
-      };
-      if (mdd <= -30) return {
-        badge:"-30% 본격 구간",
-        badgeClass:"badge-amber",
-        action:"이벤트 추가매수 실행 구간",
-        note:"본격 추가매수 구간"
-      };
-      if (mdd <= -20) return {
-        badge:"-20% 진입 구간",
-        badgeClass:"badge-blue",
-        action:"가벼운 추가매수 가능 구간",
-        note:"소액 이벤트 매수 검토"
-      };
+      if (mdd <= -40) {
+        return {
+          badge:"-40% 핵심 구간",
+          badgeClass:"badge-red",
+          action:"지금 강한 추가매수 검토",
+          note:"핵심 이벤트 구간. 강하게 대응할지 검토"
+        };
+      }
+      if (mdd <= -30) {
+        return {
+          badge:"-30% 본격 구간",
+          badgeClass:"badge-amber",
+          action:"이벤트 추가매수 실행 구간",
+          note:"본격 추가매수 구간"
+        };
+      }
+      if (mdd <= -20) {
+        return {
+          badge:"-20% 진입 구간",
+          badgeClass:"badge-blue",
+          action:"가벼운 추가매수 가능 구간",
+          note:"소액 이벤트 매수 검토"
+        };
+      }
       return {
         badge:"평시 구간",
         badgeClass:"badge-green",
@@ -622,11 +714,11 @@
       };
     }
 
-    function getSuggestedBuy(mdd, weeklyAutoBuy){
-      if (mdd <= -40) return Math.round(weeklyAutoBuy * 2);
-      if (mdd <= -30) return Math.round(weeklyAutoBuy * 1.5);
-      if (mdd <= -20) return Math.round(weeklyAutoBuy * 1.25);
-      return weeklyAutoBuy;
+    function getSuggestedBuy(mdd, settings){
+      if (mdd <= -40) return Number(settings.buy40 || 0);
+      if (mdd <= -30) return Number(settings.buy30 || 0);
+      if (mdd <= -20) return Number(settings.buy20 || 0);
+      return Number(settings.baseBuy || 0);
     }
 
     function calcProjection(monthly, annualRate, years){
@@ -636,7 +728,7 @@
       return monthly * (((1 + r) ** n - 1) / r);
     }
 
-    async function fetchQqqPrice(){
+    async function fetchPrices(){
       try {
         $("updatedAtText").textContent = "가격 불러오는 중...";
         const res = await fetch("/api/qqq");
@@ -649,6 +741,13 @@
         const settings = getSettings();
         settings.currentPrice = Number(data.currentPrice || 0);
         settings.peakPrice = Number(data.peakPrice || 0);
+
+        // 단순 추정: TQQQ 가격은 최근 비율로 대략 QQQ의 1/6.5 정도라고 고정하지 않고
+        // 현재 QQQ 현재가 기준 임시 추정값 사용
+        if (!settings.estimatedTqqqPrice) {
+          settings.estimatedTqqqPrice = Number((settings.currentPrice / 6.5).toFixed(2));
+        }
+
         settings.updatedAt = data.updatedAt || new Date().toISOString();
 
         const mdd = settings.peakPrice
@@ -691,13 +790,38 @@
       });
     }
 
+    function calcPortfolio(logs, currentTqqqPrice){
+      let totalAmount = 0;
+      let totalUnits = 0;
+
+      logs.forEach(log => {
+        const amount = Number(log.amount || 0);
+        const price = Number(log.tqqqPrice || 0);
+        if (amount > 0 && price > 0) {
+          totalAmount += amount;
+          totalUnits += amount / price;
+        }
+      });
+
+      const avgPrice = totalUnits > 0 ? totalAmount / totalUnits : 0;
+      const marketValue = totalUnits * currentTqqqPrice;
+      const profitLoss = marketValue - totalAmount;
+
+      return {
+        totalAmount,
+        totalUnits,
+        avgPrice,
+        marketValue,
+        profitLoss
+      };
+    }
+
     function render(){
       const settings = getSettings();
 
       const peakPrice = Number(settings.peakPrice) || 0;
       const currentPrice = Number(settings.currentPrice) || 0;
-      const weeklyAutoBuy = Number(settings.weeklyAutoBuy) || 0;
-      const cashReserve = Number(settings.cashReserve) || 0;
+      const estimatedTqqqPrice = Number(settings.estimatedTqqqPrice) || 0;
       const annualRate = Number(settings.annualRate) || 0;
       const years = Number(settings.years) || 0;
       const logs = settings.logs || [];
@@ -708,33 +832,42 @@
       const mdd = peakPrice ? ((currentPrice - peakPrice) / peakPrice) * 100 : 0;
       const tqqqShock = Math.max(-100, mdd * 3);
       const stage = getStage(mdd);
-      const suggestedBuy = getSuggestedBuy(mdd, weeklyAutoBuy);
+      const suggestedBuy = getSuggestedBuy(mdd, settings);
+
+      const weeklyAutoBuy = Number(settings.baseBuy || 0) * 7;
       const monthlyApprox = Math.round((weeklyAutoBuy * 52) / 12);
       const projectedValue = calcProjection(monthlyApprox, annualRate, years);
 
-      const totalLogged = logs.reduce((a,b)=>a + Number(b.amount || 0), 0);
-      const autoLogged = logs.filter(x => x.type === "기본 자동매수").reduce((a,b)=>a + Number(b.amount || 0), 0);
-      const eventLogged = logs.filter(x => x.type !== "기본 자동매수").reduce((a,b)=>a + Number(b.amount || 0), 0);
+      const portfolio = calcPortfolio(logs, estimatedTqqqPrice);
+      const targetAmount = Number(settings.targetAmount || 0);
+      const targetProgress = targetAmount > 0 ? (portfolio.marketValue / targetAmount) * 100 : 0;
 
-      $("weeklyAutoBuy").value = weeklyAutoBuy;
-      $("cashReserve").value = cashReserve;
-      $("annualRate").value = annualRate;
-      $("years").value = years;
+      $("baseBuy").value = settings.baseBuy;
+      $("buy20").value = settings.buy20;
+      $("buy30").value = settings.buy30;
+      $("buy40").value = settings.buy40;
+      $("cashReserve").value = settings.cashReserve;
+      $("annualRate").value = settings.annualRate;
+      $("years").value = settings.years;
+      $("targetAmount").value = settings.targetAmount;
 
       $("mddText").textContent = mdd.toFixed(1) + "%";
       $("mddBig").textContent = mdd.toFixed(1) + "%";
       $("tqqqShockText").textContent = tqqqShock.toFixed(1) + "%";
       $("currentPriceText").textContent = currentPrice ? "$" + currentPrice.toFixed(2) : "-";
       $("peakPriceText").textContent = peakPrice ? "$" + peakPrice.toFixed(2) : "-";
+      $("estimatedTqqqText").textContent = estimatedTqqqPrice ? "$" + estimatedTqqqPrice.toFixed(2) : "-";
+
       $("weeklyAutoBuyText").textContent = fmt(weeklyAutoBuy) + "원";
       $("monthlyApproxText").textContent = "월 환산 약 " + fmt(monthlyApprox) + "원";
       $("suggestedBuyBig").textContent = fmt(suggestedBuy) + "원";
       $("projectedValueText").textContent = fmt(projectedValue) + "원";
+      $("targetProgressText").textContent = targetProgress.toFixed(1) + "%";
 
-      $("totalLoggedText").textContent = fmt(totalLogged) + "원";
-      $("autoLoggedText").textContent = fmt(autoLogged) + "원";
-      $("eventLoggedText").textContent = fmt(eventLogged) + "원";
-      $("cashReserveText").textContent = fmt(cashReserve) + "원";
+      $("totalUnitsText").textContent = portfolio.totalUnits.toFixed(4);
+      $("avgPriceText").textContent = "$" + portfolio.avgPrice.toFixed(2);
+      $("marketValueText").textContent = fmt(portfolio.marketValue) + "원";
+      $("profitLossText").textContent = (portfolio.profitLoss >= 0 ? "+" : "") + fmt(portfolio.profitLoss) + "원";
 
       $("updatedAtText").textContent = updatedAt
         ? "자동 반영: " + new Date(updatedAt).toLocaleString("ko-KR")
@@ -764,19 +897,24 @@
       if (!logs.length){
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" class="muted" style="padding:20px;">기록이 아직 없습니다.</td>
+            <td colspan="6" class="muted" style="padding:20px;">기록이 아직 없습니다.</td>
           </tr>
         `;
         return;
       }
 
       logs.forEach((log, idx) => {
+        const amount = Number(log.amount || 0);
+        const price = Number(log.tqqqPrice || 0);
+        const units = price > 0 ? amount / price : 0;
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${log.date || "-"}</td>
           <td>${log.type || "-"}</td>
-          <td>${fmt(log.amount)}원</td>
-          <td>${log.memo || "-"}</td>
+          <td>${fmt(amount)}원</td>
+          <td>$${price.toFixed(2)}</td>
+          <td>${units.toFixed(4)}</td>
           <td class="right"><button class="danger-btn" onclick="deleteLog(${idx})">삭제</button></td>
         `;
         tbody.appendChild(tr);
@@ -785,10 +923,14 @@
 
     function saveFormSettings(){
       const settings = getSettings();
-      settings.weeklyAutoBuy = Number($("weeklyAutoBuy").value || 0);
+      settings.baseBuy = Number($("baseBuy").value || 0);
+      settings.buy20 = Number($("buy20").value || 0);
+      settings.buy30 = Number($("buy30").value || 0);
+      settings.buy40 = Number($("buy40").value || 0);
       settings.cashReserve = Number($("cashReserve").value || 0);
       settings.annualRate = Number($("annualRate").value || 0);
       settings.years = Number($("years").value || 0);
+      settings.targetAmount = Number($("targetAmount").value || 0);
       saveSettings(settings);
       render();
       alert("설정 저장 완료");
@@ -801,27 +943,28 @@
       const type = typeOverride || $("logType").value;
       const amount = Number(amountOverride || $("logAmount").value || 0);
       const memo = memoOverride || $("logMemo").value || "-";
+      const tqqqPrice = Number($("logTqqqPrice").value || settings.estimatedTqqqPrice || 0);
 
       if (!amount){
         alert("금액을 입력해줘");
         return;
       }
 
-      settings.logs.unshift({ date, type, amount, memo });
+      settings.logs.unshift({ date, type, amount, memo, tqqqPrice });
       saveSettings(settings);
 
       $("logAmount").value = "";
       $("logMemo").value = "";
+      $("logTqqqPrice").value = "";
       render();
     }
 
     function addSuggestedLog(){
       const settings = getSettings();
-      const peakPrice = Number(settings.peakPrice) || 0;
-      const currentPrice = Number(settings.currentPrice) || 0;
-      const weeklyAutoBuy = Number(settings.weeklyAutoBuy) || 0;
+      const peakPrice = Number(settings.peakPrice || 0);
+      const currentPrice = Number(settings.currentPrice || 0);
       const mdd = peakPrice ? ((currentPrice - peakPrice) / peakPrice) * 100 : 0;
-      const suggestedBuy = getSuggestedBuy(mdd, weeklyAutoBuy);
+      const suggestedBuy = getSuggestedBuy(mdd, settings);
       const stage = getStage(mdd);
 
       addLog(
@@ -858,9 +1001,8 @@
         clearInterval(autoRefreshTimer);
         autoRefreshTimer = null;
       }
-
       if (on){
-        autoRefreshTimer = setInterval(fetchQqqPrice, 10 * 60 * 1000);
+        autoRefreshTimer = setInterval(fetchPrices, 10 * 60 * 1000);
       }
     }
 
@@ -870,7 +1012,7 @@
     $("addLogBtn").addEventListener("click", () => addLog());
     $("addSuggestedBtn").addEventListener("click", addSuggestedLog);
     $("clearLogBtn").addEventListener("click", clearLogs);
-    $("refreshPriceBtn").addEventListener("click", fetchQqqPrice);
+    $("refreshPriceBtn").addEventListener("click", fetchPrices);
     $("toggleAutoRefreshBtn").addEventListener("click", toggleAutoRefresh);
 
     (function init(){
@@ -879,7 +1021,7 @@
       }
       $("logDate").value = new Date().toISOString().slice(0,10);
       render();
-      fetchQqqPrice();
+      fetchPrices();
     })();
   </script>
 </body>
